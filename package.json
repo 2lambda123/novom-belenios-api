@@ -1,0 +1,42 @@
+{
+  "name": "@novom/belenios-api",
+  "version": "0.0.0",
+  "description": "A server API wrapping the belenios-tool command-line tool",
+  "scripts": {
+    "start": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/Server",
+    "start:voterClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/VoterClient",
+    "start:adminClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/AdminClient",
+    "setup": "make && mkdir elections",
+    "test": "yarn test:lint && yarn test:unit",
+    "test:unit": "jest --runInBand",
+    "test:lint": "eslint src && stylelint \"src/**/*.js\"",
+    "wipeout": "rm -r elections/*"
+  },
+  "dependencies": {
+    "babel-eslint": "^10.1.0",
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "jest": "^26.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "long-timeout": "^0.1.1",
+    "rimraf": "^3.0.2",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-optional-chaining": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@types/jest": "^26.0.14",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.7"
+  }
+}
