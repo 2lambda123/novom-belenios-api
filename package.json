@@ -6,7 +6,7 @@
     "start": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/Server",
     "start:voterClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/VoterClient",
     "start:adminClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/AdminClient",
-    "setup": "make && mkdir elections",
+    "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios && mkdir elections",
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "jest --runInBand",
     "test:lint": "eslint src && stylelint \"src/**/*.js\"",

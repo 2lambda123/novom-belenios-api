@@ -1,7 +1,7 @@
 #!/bin/bash
 
 belenios-tool () {
-  _build/install/default/bin/belenios-tool "$@"
+  dependencies/belenios/_build/install/default/bin/belenios-tool "$@"
 }
 
 PRIVCRED=$1
