@@ -9,7 +9,7 @@
     "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios && mkdir elections",
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "jest --runInBand",
-    "test:lint": "eslint src && stylelint \"src/**/*.js\"",
+    "test:lint": "eslint src",
     "grant-access": "sudo chmod -R a+rwx *",
     "wipeout": "rm -r elections/*"
   },

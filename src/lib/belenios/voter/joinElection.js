@@ -29,6 +29,7 @@ function joinElection(electionId, userId, socket, callback) {
     }
 
     socket.join(electionId);
+    // eslint-disable-next-line no-param-reassign
     socket.privCred = userCred;
 
     callback({ status: 'OK' });
