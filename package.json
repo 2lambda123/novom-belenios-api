@@ -10,6 +10,7 @@
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "jest --runInBand",
     "test:lint": "eslint src && stylelint \"src/**/*.js\"",
+    "grant-access": "sudo chmod -R a+rwx *",
     "wipeout": "rm -r elections/*"
   },
   "dependencies": {
