@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ELECTIONS_DIR } from '../global';
 
-function joinElection(electionId, socket, callback) {
+function subscribeElection(electionId, socket, callback) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);
 
@@ -19,4 +19,4 @@ function joinElection(electionId, socket, callback) {
   }
 }
 
-export default joinElection;
+export default subscribeElection;

@@ -1,12 +1,12 @@
 import fs from 'fs';
 import rimfaf from 'rimraf';
 import path from 'path';
-import joinElection from '../joinElection';
 import { ELECTIONS_DIR } from '../../global';
+import subscribeElection from '../subscribeElection';
 
 const DEFAULT_SOCKET = { join: jest.fn() };
 
-describe('Tests joinElection', () => {
+describe('Tests subscribeElection', () => {
   describe('Election not created yet.', () => {
     it('Should return FAILED.', (done) => {
       function callback(data) {
@@ -18,7 +18,7 @@ describe('Tests joinElection', () => {
           done(error);
         }
       }
-      joinElection('Invalid id', DEFAULT_SOCKET, callback);
+      subscribeElection('Invalid id', DEFAULT_SOCKET, callback);
     });
   });
   describe('Election created.', () => {
@@ -46,7 +46,7 @@ describe('Tests joinElection', () => {
           done(error);
         }
       }
-      joinElection(DEFAULT_ELECTION_ID, undefined, callback);
+      subscribeElection(DEFAULT_ELECTION_ID, undefined, callback);
     });
     it('Should return OK and call socket.join', (done) => {
       const join = jest.fn();
@@ -62,7 +62,7 @@ describe('Tests joinElection', () => {
           done(error);
         }
       }
-      joinElection(DEFAULT_ELECTION_ID, socket, callback);
+      subscribeElection(DEFAULT_ELECTION_ID, socket, callback);
     });
   });
 });
