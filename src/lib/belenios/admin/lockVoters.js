@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { execFile } from 'child_process';
-import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
+import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 
-function executeMakeTrustees(electionId, votersFilePath, electionDir, callback) {
-  execFile('src/scripts/makeTrustees.sh', [electionId, votersFilePath, electionDir], (error, stdout) => {
+function executeMakeTrustees(electionId, votersFilePath, groupFilePath, electionDir, callback) {
+  execFile('src/scripts/makeTrustees.sh', [electionId, votersFilePath, groupFilePath, electionDir], (error, stdout) => {
     if (error) {
       callback({ status: 'FAILED', error });
       return;
@@ -29,7 +29,7 @@ function lockVoters(electionId, callback) {
       return;
     }
 
-    executeMakeTrustees(electionId, votersFilePath, electionDir, callback);
+    executeMakeTrustees(electionId, votersFilePath, GROUP_FILE_PATH, electionDir, callback);
   } catch (error) {
     console.log(error);
     callback({ status: 'FAILED', error: error.message });
