@@ -53,7 +53,7 @@ describe('Tests closeElection', () => {
     rimfaf.sync(electionPath);
   });
 
-  it('Should return OK. Missing params', (done) => {
+  it('Should return FAILED. Missing params', (done) => {
     function callback(data) {
       try {
         console.log(data);
