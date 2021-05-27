@@ -1,12 +1,10 @@
-import fs from 'fs';
-import rimfaf from 'rimraf';
-import path from 'path';
-import { ELECTIONS_DIR } from '../../global';
 import setVoters from '../../admin/setVoters';
 import lockVoters from '../../admin/lockVoters';
 import joinElection from '../joinElection';
+import deleteElection from '../../admin/deleteElection';
+import createElection from '../../admin/createElection';
 
-const DEFAULT_ELECTION_ID = 'AAAAAAAAAAAAAA'; // Length need to be equal to 14 char.
+let ELECTION_ID;
 const DEFAULT_USER_ID = 'bob';
 const DEFAULT_VOTERS = [{ id: DEFAULT_USER_ID, weight: 1 }, { id: 'bobby', weight: 3 }];
 const DEFAULT_SOCKET = { join: jest.fn() };
@@ -28,19 +26,18 @@ describe('Tests joinElection', () => {
   });
   describe('Election created.', () => {
     beforeEach((done) => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      if (!fs.existsSync(electionPath)) {
-        fs.mkdirSync(electionPath);
-      }
-
-      setVoters(DEFAULT_ELECTION_ID, DEFAULT_VOTERS, () => {
-        lockVoters(DEFAULT_ELECTION_ID, () => { done(); });
+      createElection(({ payload }) => {
+        ELECTION_ID = payload;
+        setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
+          lockVoters(ELECTION_ID, () => { done(); });
+        });
       });
     });
 
-    afterEach(() => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      rimfaf.sync(electionPath);
+    afterEach((done) => {
+      deleteElection(ELECTION_ID, () => {
+        done();
+      });
     });
 
     it('Should return FAILED. Undefined params', (done) => {
@@ -69,7 +66,7 @@ describe('Tests joinElection', () => {
           done(error);
         }
       }
-      joinElection(DEFAULT_ELECTION_ID, DEFAULT_USER_ID, socket, callback);
+      joinElection(ELECTION_ID, DEFAULT_USER_ID, socket, callback);
     });
     it('Should return OK and add userCred to socket', (done) => {
       const join = jest.fn();
@@ -85,7 +82,7 @@ describe('Tests joinElection', () => {
           done(error);
         }
       }
-      joinElection(DEFAULT_ELECTION_ID, DEFAULT_USER_ID, socket, callback);
+      joinElection(ELECTION_ID, DEFAULT_USER_ID, socket, callback);
     });
   });
 });
