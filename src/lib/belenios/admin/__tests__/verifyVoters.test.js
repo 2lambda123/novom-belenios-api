@@ -1,9 +1,7 @@
-import fs from 'fs';
-import rimfaf from 'rimraf';
-import path from 'path';
-import { ELECTIONS_DIR } from '../../global';
 import verifyVoters from '../verifyVoters';
 import setVoters from '../setVoters';
+import createElection from '../createElection';
+import deleteElection from '../deleteElection';
 
 describe('Tests verifyVoters', () => {
   describe('Election not created yet.', () => {
@@ -21,21 +19,22 @@ describe('Tests verifyVoters', () => {
     });
   });
   describe('Election created.', () => {
-    const DEFAULT_ELECTION_ID = 'TEST_ELECTION_ID';
+    let ELECTION_ID;
     const DEFAULT_VOTERS = [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }];
 
     beforeEach((done) => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      if (!fs.existsSync(electionPath)) {
-        fs.mkdirSync(electionPath);
-      }
-
-      setVoters(DEFAULT_ELECTION_ID, DEFAULT_VOTERS, () => done());
+      createElection(({ payload }) => {
+        ELECTION_ID = payload;
+        setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
+          done();
+        });
+      });
     });
 
-    afterEach(() => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      rimfaf.sync(electionPath);
+    afterEach((done) => {
+      deleteElection(ELECTION_ID, () => {
+        done();
+      });
     });
 
     it('Should return FAILED.', (done) => {
@@ -62,7 +61,7 @@ describe('Tests verifyVoters', () => {
           done(error);
         }
       }
-      verifyVoters(DEFAULT_ELECTION_ID, callback);
+      verifyVoters(ELECTION_ID, callback);
     });
   });
 });

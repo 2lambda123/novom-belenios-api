@@ -1,4 +1,3 @@
-import fs from 'fs';
 import rimfaf from 'rimraf';
 import path from 'path';
 import { ELECTIONS_DIR } from '../../global';
@@ -8,9 +7,10 @@ import lockVoters from '../lockVoters';
 import joinElection from '../../voter/joinElection';
 import vote from '../../voter/vote';
 import computeVoters from '../computeVoters';
+import createElection from '../createElection';
 
 describe('Tests computeVoters', () => {
-  const DEFAULT_ELECTION_ID = 'AAAAAAAAAAAAAA'; // Length need to be equal to 14 char.
+  let ELECTION_ID;
   const DEFAULT_USER_ID_1 = 'bob';
   const DEFAULT_VOTERS = [
     { id: DEFAULT_USER_ID_1, weight: 1 },
@@ -32,19 +32,16 @@ describe('Tests computeVoters', () => {
   };
 
   beforeEach((done) => {
-    const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-    if (!fs.existsSync(electionPath)) {
-      fs.mkdirSync(electionPath);
-    }
-
     const ballot = JSON.stringify(DEFAULT_BALLOT);
-
-    setVoters(DEFAULT_ELECTION_ID, DEFAULT_VOTERS, () => {
-      lockVoters(DEFAULT_ELECTION_ID, () => {
-        makeElection(DEFAULT_ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), () => {
-          joinElection(DEFAULT_ELECTION_ID, DEFAULT_USER_ID_1, DEFAULT_SOCKET, () => {
-            vote(DEFAULT_ELECTION_ID, DEFAULT_SOCKET.privCred, ballot, () => {
-              done();
+    createElection(({ payload }) => {
+      ELECTION_ID = payload;
+      setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
+        lockVoters(ELECTION_ID, () => {
+          makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), () => {
+            joinElection(ELECTION_ID, DEFAULT_USER_ID_1, DEFAULT_SOCKET, () => {
+              vote(ELECTION_ID, DEFAULT_SOCKET.privCred, ballot, () => {
+                done();
+              });
             });
           });
         });
@@ -53,7 +50,7 @@ describe('Tests computeVoters', () => {
   });
 
   afterEach(() => {
-    const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
+    const electionPath = path.join(ELECTIONS_DIR, ELECTION_ID);
     rimfaf.sync(electionPath);
   });
 
@@ -81,6 +78,6 @@ describe('Tests computeVoters', () => {
         done(error);
       }
     }
-    computeVoters(DEFAULT_ELECTION_ID, callback);
+    computeVoters(ELECTION_ID, callback);
   });
 });

@@ -1,8 +1,6 @@
-import fs from 'fs';
-import rimfaf from 'rimraf';
-import path from 'path';
-import { ELECTIONS_DIR } from '../../global';
 import subscribeElection from '../subscribeElection';
+import deleteElection from '../deleteElection';
+import createElection from '../createElection';
 
 const DEFAULT_SOCKET = { join: jest.fn() };
 
@@ -22,18 +20,19 @@ describe('Tests subscribeElection', () => {
     });
   });
   describe('Election created.', () => {
-    const DEFAULT_ELECTION_ID = 'TEST_ELECTION_ID';
+    let ELECTION_ID;
 
-    beforeEach(() => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      if (!fs.existsSync(electionPath)) {
-        fs.mkdirSync(electionPath);
-      }
+    beforeEach((done) => {
+      createElection(({ payload }) => {
+        ELECTION_ID = payload;
+        done();
+      });
     });
 
-    afterEach(() => {
-      const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-      rimfaf.sync(electionPath);
+    afterEach((done) => {
+      deleteElection(ELECTION_ID, () => {
+        done();
+      });
     });
 
     it('Should return FAILED. Undefined socket', (done) => {
@@ -46,7 +45,7 @@ describe('Tests subscribeElection', () => {
           done(error);
         }
       }
-      subscribeElection(DEFAULT_ELECTION_ID, undefined, callback);
+      subscribeElection(ELECTION_ID, undefined, callback);
     });
     it('Should return OK and call socket.join', (done) => {
       const join = jest.fn();
@@ -62,7 +61,7 @@ describe('Tests subscribeElection', () => {
           done(error);
         }
       }
-      subscribeElection(DEFAULT_ELECTION_ID, socket, callback);
+      subscribeElection(ELECTION_ID, socket, callback);
     });
   });
 });

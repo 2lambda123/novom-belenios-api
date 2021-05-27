@@ -1,16 +1,14 @@
-import fs from 'fs';
-import rimfaf from 'rimraf';
-import path from 'path';
-import { ELECTIONS_DIR } from '../../global';
 import setVoters from '../setVoters';
 import makeElection from '../makeElection';
 import lockVoters from '../lockVoters';
 import joinElection from '../../voter/joinElection';
 import vote from '../../voter/vote';
 import closeElection from '../closeElection';
+import deleteElection from '../deleteElection';
+import createElection from '../createElection';
 
 describe('Tests closeElection', () => {
-  const DEFAULT_ELECTION_ID = 'AAAAAAAAAAAAAA'; // Length need to be equal to 14 char.
+  let ELECTION_ID;
   const DEFAULT_USER_ID = 'bob';
   const DEFAULT_VOTERS = [{ id: DEFAULT_USER_ID, weight: 1 }, { id: 'bobby', weight: 3 }];
   const DEFAULT_TEMPLATE = {
@@ -29,28 +27,27 @@ describe('Tests closeElection', () => {
   };
 
   beforeEach((done) => {
-    const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-    if (!fs.existsSync(electionPath)) {
-      fs.mkdirSync(electionPath);
-    }
-
-    setVoters(DEFAULT_ELECTION_ID, DEFAULT_VOTERS, () => {
-      lockVoters(DEFAULT_ELECTION_ID, () => {
-        makeElection(DEFAULT_ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), () => {
-          joinElection(DEFAULT_ELECTION_ID, DEFAULT_USER_ID, DEFAULT_SOCKET, () => {
-            vote(DEFAULT_ELECTION_ID, DEFAULT_SOCKET.privCred, JSON.stringify(DEFAULT_BALLOT),
-              () => {
-                done();
-              });
+    createElection(({ payload }) => {
+      ELECTION_ID = payload;
+      setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
+        lockVoters(ELECTION_ID, () => {
+          makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), () => {
+            joinElection(ELECTION_ID, DEFAULT_USER_ID, DEFAULT_SOCKET, () => {
+              vote(ELECTION_ID, DEFAULT_SOCKET.privCred, JSON.stringify(DEFAULT_BALLOT),
+                () => {
+                  done();
+                });
+            });
           });
         });
       });
     });
   });
 
-  afterEach(() => {
-    const electionPath = path.join(ELECTIONS_DIR, DEFAULT_ELECTION_ID);
-    rimfaf.sync(electionPath);
+  afterEach((done) => {
+    deleteElection(ELECTION_ID, () => {
+      done();
+    });
   });
 
   it('Should return FAILED. Missing params', (done) => {
@@ -67,7 +64,7 @@ describe('Tests closeElection', () => {
     closeElection(undefined, callback);
   });
 
-  it('Should return OK', (done) => {
+  it('Should return OK and result should be valid', (done) => {
     function callback(data) {
       try {
         console.log(data);
@@ -79,6 +76,6 @@ describe('Tests closeElection', () => {
         done(error);
       }
     }
-    closeElection(DEFAULT_ELECTION_ID, callback);
+    closeElection(ELECTION_ID, callback);
   });
 });
