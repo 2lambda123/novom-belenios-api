@@ -1,19 +1,19 @@
 import fs from 'fs';
 import { execFile } from 'child_process';
 import path from 'path';
-import { ELECTIONS_DIR, BALLOTS_FILE_NAME, PRIVATE_CREDS_FILE_NAME } from '../global';
+import { ELECTIONS_DIR, BALLOTS_FILE_NAME } from '../global';
 
-function executeVote(privCred, ballot, ballotFilePath, privCredFilePath, electionDir, callback) {
+function executeVote(privCred, ballot, ballotFilePath, electionDir, callback) {
   const paremeters = [
     privCred,
     ballot,
     ballotFilePath,
-    privCredFilePath,
     electionDir,
   ];
 
   execFile('src/scripts/vote.sh', paremeters, (error) => {
     if (error) {
+      console.log(error);
       callback({ status: 'FAILED', error });
       return;
     }
@@ -31,9 +31,8 @@ function vote(electionId, privCred, ballot, callback) {
     }
 
     const ballotFilePath = path.join(electionDir, BALLOTS_FILE_NAME);
-    const privCredFilePath = path.join(electionDir, PRIVATE_CREDS_FILE_NAME);
 
-    executeVote(privCred, ballot, ballotFilePath, privCredFilePath, electionDir, callback);
+    executeVote(privCred, ballot, ballotFilePath, electionDir, callback);
   } catch (error) {
     console.log(error);
     callback({ status: 'FAILED', error: error.message });
