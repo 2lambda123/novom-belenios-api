@@ -12,7 +12,7 @@ export default async function killProcess(childProcess) {
       if (psTreeErr) {
         reject(psTreeErr);
       }
-      [pid, ...children.map(p => p.PID)]
+      [pid, ...children.map((p) => p.PID)]
         .forEach((tpid) => {
           try {
             process.kill(tpid, signal);

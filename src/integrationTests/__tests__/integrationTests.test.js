@@ -153,9 +153,11 @@ describe('Integration test', () => {
 
   test('Scenario #2', (done) => {
     // TODO: Asyc vote
+    done();
   });
 
   test('Scenario #3', (done) => {
     // TODO: Load test
+    done();
   });
 });
