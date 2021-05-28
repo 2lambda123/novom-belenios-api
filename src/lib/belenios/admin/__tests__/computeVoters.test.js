@@ -1,6 +1,3 @@
-import rimfaf from 'rimraf';
-import path from 'path';
-import { ELECTIONS_DIR } from '../../global';
 import setVoters from '../setVoters';
 import makeElection from '../makeElection';
 import lockVoters from '../lockVoters';
@@ -8,6 +5,7 @@ import joinElection from '../../voter/joinElection';
 import vote from '../../voter/vote';
 import computeVoters from '../computeVoters';
 import createElection from '../createElection';
+import deleteElection from '../deleteElection';
 
 describe('Tests computeVoters', () => {
   let ELECTION_ID;
@@ -49,9 +47,10 @@ describe('Tests computeVoters', () => {
     });
   });
 
-  afterEach(() => {
-    const electionPath = path.join(ELECTIONS_DIR, ELECTION_ID);
-    rimfaf.sync(electionPath);
+  afterEach((done) => {
+    deleteElection(ELECTION_ID, () => {
+      done();
+    });
   });
 
   it('Should return FAILED. Missing params', (done) => {
