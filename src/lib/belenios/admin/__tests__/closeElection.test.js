@@ -53,7 +53,6 @@ describe('Tests closeElection', () => {
   it('Should return FAILED. Missing params', (done) => {
     function callback(data) {
       try {
-        console.log(data);
         expect(data).toBeDefined();
         expect(data.status).toEqual('FAILED');
         done();
@@ -67,7 +66,6 @@ describe('Tests closeElection', () => {
   it('Should return OK and result should be valid', (done) => {
     function callback(data) {
       try {
-        console.log(data);
         expect(data).toBeDefined();
         expect(data.status).toEqual('OK');
         expect(data.payload).toEqual([[1, 0], [1, 0, 0]]);
