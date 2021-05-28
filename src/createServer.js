@@ -69,10 +69,6 @@ const createServer = (port = 3000) => {
     socket.on('join-election', (electionId, userId, callback) => { joinElection(electionId, userId, socket, callback); });
     socket.on('vote', (electionId, ballot, callback) => { vote(electionId, socket.privCred, ballot, callback); });
   });
-
-  return {
-    close: () => httpServer.close(),
-  };
 };
 
 export default createServer;
