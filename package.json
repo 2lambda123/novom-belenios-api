@@ -2,6 +2,7 @@
   "name": "@novom/belenios-api",
   "version": "0.0.0",
   "description": "A server API wrapping the belenios-tool command-line tool",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "start": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/Server",    
     "start:integrationTestServer": "JWT_SECRET='hii' JWT_ALGO='HS256' babel-node src/integrationTests/IntegrationTestServer",
