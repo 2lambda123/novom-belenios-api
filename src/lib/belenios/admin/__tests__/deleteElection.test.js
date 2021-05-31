@@ -16,8 +16,6 @@ describe('Tests deleteElection', () => {
     createElection(({ payload }) => {
       deleteElection(payload, callback);
     });
-
-    createElection(callback);
   });
 
   it('Should return FAILED. Conference does not exist', (done) => {
