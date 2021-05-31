@@ -59,7 +59,7 @@ describe('Tests vote', () => {
     vote(undefined, undefined, undefined, callback);
   });
 
-  it('Should return OK', (done) => {
+  it('Should return OK. Single vote', (done) => {
     function callback(data) {
       try {
         expect(data).toBeDefined();
@@ -70,5 +70,24 @@ describe('Tests vote', () => {
       }
     }
     vote(ELECTION_ID, DEFAULT_SOCKET.privCred, JSON.stringify(DEFAULT_BALLOT), callback);
+  });
+
+  it('Should return OK. Multiple votes', (done) => {
+    function callback(data) {
+      try {
+        expect(data).toBeDefined();
+        expect(data.status).toEqual('OK');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    }
+
+    const ballot1 = [[1, 0], [1, 0, 0]];
+    const ballot2 = [[1, 0], [0, 1, 0]];
+
+    vote(ELECTION_ID, DEFAULT_SOCKET.privCred, JSON.stringify(ballot1), () => {
+      vote(ELECTION_ID, DEFAULT_SOCKET.privCred, JSON.stringify(ballot2), callback);
+    });
   });
 });
