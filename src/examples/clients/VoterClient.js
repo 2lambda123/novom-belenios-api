@@ -1,7 +1,9 @@
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
 
-const socket = io('http://localhost:3000/voters', {
+const DEFAULT_EVENT_ID = 'cYd2gj4iqkP8Py';
+
+const socket = io('http://localhost:3000/voter', {
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { ticketId: 'invitationId' } },
@@ -30,11 +32,15 @@ socket.on('connect', () => {
         algorithm: process.env.JWT_ALGO,
         expiresIn: 10,
       },
-    ), ({ errMessage }) => { console.log(errMessage); });
+    ), ({ status }) => { console.log(status); });
   }, 8000);
 
-  socket.emit('join-election', 'testElection', ({ status }) => {
-    console.log(status);
+  socket.emit('join-election', DEFAULT_EVENT_ID, 'bob', (joinElection) => {
+    console.log(joinElection);
+    const ballot = JSON.stringify([[1, 0], [1, 0, 0]]);
+    socket.emit('vote', DEFAULT_EVENT_ID, ballot, (vote) => {
+      console.log(vote);
+    });
   });
 });
 
