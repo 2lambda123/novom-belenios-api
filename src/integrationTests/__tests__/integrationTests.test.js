@@ -387,7 +387,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 50;
+    const nbVoters = 25;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
