@@ -290,16 +290,16 @@ describe('Integration test', () => {
     expect(result.payload).toEqual([[100, 0], [100, 0, 0]]);
   });
 
-  // Scenario #4 - Async vote with 25 voters that votes 3 times (Only the last vote count)
+  // Scenario #4 - Async vote with 10 voters that votes 3 times (Only the last vote count)
   // |---------------------------------------------------------------------------------------|
   // | USER                    | VOTE                * WEIGHT  =   EXPECTED RESULT           |
   // |---------------------------------------------------------------------------------------|
   // | voterX,...voterX + N    | [[1, 0], [0, 0, 1]] * 1       =   [[1,    0], [0,  0, 1]]   |
   // | voterX,...voterX + N    | [[0, 1], [0, 1, 0]] * 1       =   [[1,    0], [0,  1, 0]]   |
   // | voterX,...voterX + N    | [[1, 0], [1, 0, 0]] * 1       =   [[1,    0], [1,  0, 0]]   |
-  // | Total                   |                               =   [[25,  0],  [25, 0, 0]]   |
+  // | Total                   |                               =   [[10,  0],  [10, 0, 0]]   |
   // |---------------------------------------------------------------------------------------|
-  test('Scenario #4 - Async vote - 25 voters that votes 3 times', async () => {
+  test('Scenario #4 - Async vote - 10 voters that votes 3 times', async () => {
     jest.setTimeout(60000);
 
     const template = {
@@ -312,7 +312,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 25;
+    const nbVoters = 10;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
@@ -364,15 +364,15 @@ describe('Integration test', () => {
     const result = await electionLifeCycleAsync(adminSocket, userList, template, votingScenario);
     expect(result).toBeDefined();
     expect(result.status).toEqual('OK');
-    expect(result.payload).toEqual([[25, 0], [25, 0, 0]]);
+    expect(result.payload).toEqual([[10, 0], [10, 0, 0]]);
   });
 
-  // Scenario #5 - Async vote with 25 voters - Voting table
+  // Scenario #5 - Async vote with 10 voters - Voting table
   // |---------------------------------------------------------------------------------------|
   // | USER                    | VOTE                * WEIGHT  =   EXPECTED RESULT           |
   // |---------------------------------------------------------------------------------------|
   // | voterX,...voterX + N    | [[1, 0], [1, 0, 0]] * 1       =   [[1,    0], [1,   0, 0]]  |
-  // | Total                   |                               =   [[25,  0],   [25, 0, 0]]  |
+  // | Total                   |                               =   [[10,  0],   [10, 0, 0]]  |
   // |---------------------------------------------------------------------------------------|
   test('Scenario #5 - Async vote - 25 voters - 5 simultaneous elections', async () => {
     jest.setTimeout(60000);
@@ -387,7 +387,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 25;
+    const nbVoters = 10;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
@@ -434,7 +434,7 @@ describe('Integration test', () => {
     results.forEach((result) => {
       expect(result).toBeDefined();
       expect(result.status).toEqual('OK');
-      expect(result.payload).toEqual([[25, 0], [25, 0, 0]]);
+      expect(result.payload).toEqual([[10, 0], [10, 0, 0]]);
     });
   });
 });
