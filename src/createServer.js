@@ -32,6 +32,7 @@ const createServer = (port = 3000) => {
       path: '/',
     },
   });
+  const votingQueue = [];
 
   expressApp.use('/', router);
 
@@ -47,7 +48,9 @@ const createServer = (port = 3000) => {
     socket.on('verify-voters', verifyVoters);
     socket.on('lock-voters', lockVoters);
     socket.on('make-election', makeElection);
-    socket.on('subscribe-election', (electionId, callback) => { subscribeElection(electionId, socket, callback); });
+    socket.on('subscribe-election', (electionId, callback) => {
+      subscribeElection(electionId, socket, callback);
+    });
     socket.on('compute-voters', computeVoters);
     socket.on('close-election', closeElection);
     socket.on('delete-election', deleteElection);
@@ -66,9 +69,19 @@ const createServer = (port = 3000) => {
   });
 
   io.of('/voter').on('connection', (socket) => {
-    socket.on('join-election', (electionId, userId, callback) => { joinElection(electionId, userId, socket, callback); });
-    socket.on('vote', (electionId, ballot, callback) => { vote(electionId, socket.privCred, ballot, callback); });
+    socket.on('join-election', (electionId, userId, callback) => {
+      joinElection(electionId, userId, socket, callback);
+    });
+    socket.on('vote', (electionId, ballot, callback) => {
+      votingQueue.push({ func: vote, params: [electionId, socket.privCred, ballot, callback] });
+    });
   });
+
+  setInterval(() => {
+    votingQueue.splice(0, 25).forEach(({ func, params }) => {
+      func(...params);
+    });
+  }, 1000);
 };
 
 export default createServer;
