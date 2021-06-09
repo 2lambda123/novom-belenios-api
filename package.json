@@ -4,10 +4,10 @@
   "description": "A server API wrapping the belenios-tool command-line tool",
   "license": "AGPL-3.0-only",
   "scripts": {
-    "start": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/Server",    
+    "start": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/Server",    
     "start:integrationTestServer": "JWT_SECRET='hii' JWT_ALGO='HS256' babel-node src/integrationTests/IntegrationTestServer",
-    "start:voterClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/VoterClient",
-    "start:adminClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch api --exec babel-node src/examples/AdminClient",
+    "start:voterClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/VoterClient",
+    "start:adminClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/AdminClient",
     "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios && mkdir elections",
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "jest --runInBand",
