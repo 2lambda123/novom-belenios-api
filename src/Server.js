@@ -1,3 +1,4 @@
 import createServer from './createServer';
+import settings from './lib/settings';
 
-createServer();
+createServer(settings.port);
