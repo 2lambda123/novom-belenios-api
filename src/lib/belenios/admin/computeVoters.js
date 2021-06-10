@@ -12,7 +12,8 @@ function executeComputeVoters(electionDir, privCredFilePath, callback) {
     const voters = stdout.split('\n').filter((voter) => voter);
     const nbVoters = voters.length;
     const votes = voters.map((voter) => voter.split(',')[1]).filter((vote) => vote);
-    const nbVotes = Number(votes.reduce((total, voter) => Number(voter) + Number(total)));
+    const nbVotes = votes && votes.length
+      ? Number(votes.reduce((total, voter) => Number(voter) + Number(total))) : 0;
     callback({ status: 'OK', payload: { nbVoters, nbVotes } });
   });
 }
