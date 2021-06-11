@@ -1,16 +1,16 @@
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
 
-const DEFAULT_EVENT_ID = 'cYd2gj4iqkP8Py';
+const DEFAULT_EVENT_ID = 'eHCZDaa9jgBXuZ';
 
-const socket = io('http://localhost:3000/admin', {
+const socket = io('http://localhost:8043/admin', {
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 10,
+        expiresIn: 12,
       },
     ),
   },

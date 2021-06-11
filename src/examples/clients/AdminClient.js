@@ -11,14 +11,21 @@ const template = {
   }],
 };
 
-const socket = io('http://localhost:3000/admin', {
+const votersList = [];
+const nbVoters = 10000;
+
+for (let i = 0; i < nbVoters; i += 1) {
+  votersList.push({ id: `voter${i}`, weight: 1 });
+}
+
+const socket = io('http://localhost:8043/admin', {
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 10,
+        expiresIn: 12,
       },
     ),
   },
@@ -33,7 +40,7 @@ socket.on('connect', () => {
   console.log('connected');
   socket.emit('create-election', (createElection) => {
     console.log('create-election', createElection);
-    socket.emit('set-voters', createElection.payload, [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }], (setVoters) => {
+    socket.emit('set-voters', createElection.payload, votersList, (setVoters) => {
       console.log('set-voters', setVoters);
       socket.emit('verify-voters', createElection.payload, (verifyVoters) => {
         console.log('verify-voters', verifyVoters);
