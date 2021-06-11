@@ -1,6 +1,7 @@
 import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
+import fs from 'fs';
 
 import authHelper from './authHelper';
 import createElection from './lib/belenios/admin/createElection';
@@ -14,6 +15,7 @@ import closeElection from './lib/belenios/admin/closeElection';
 import subscribeElection from './lib/belenios/admin/subscribeElection';
 import computeVoters from './lib/belenios/admin/computeVoters';
 import deleteElection from './lib/belenios/admin/deleteElection';
+import { ELECTIONS_DIR } from './lib/belenios/global';
 
 const createServer = (port = 3000) => {
   const expressApp = express();
@@ -33,6 +35,10 @@ const createServer = (port = 3000) => {
     },
   });
   const votingQueue = [];
+
+  if (!fs.existsSync(ELECTIONS_DIR)) {
+    fs.mkdirSync(ELECTIONS_DIR);
+  }
 
   expressApp.use('/', router);
 
