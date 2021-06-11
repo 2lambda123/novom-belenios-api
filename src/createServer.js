@@ -88,6 +88,8 @@ const createServer = (port = 3000) => {
       func(...params);
     });
   }, 1000);
+
+  console.log(`Server started on port ${port}`);
 };
 
 export default createServer;
