@@ -4,9 +4,9 @@ import { ELECTIONS_DIR, PRIVATE_CREDS_FILE_NAME } from '../global';
 
 function joinElection(electionId, userId, socket, callback) {
   try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
 
-    if (!fs.existsSync(electionDir)) {
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

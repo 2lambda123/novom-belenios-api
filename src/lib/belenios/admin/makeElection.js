@@ -1,10 +1,13 @@
 import fs from 'fs';
-import { execFile } from 'child_process';
+import { exec } from 'child_process';
 import path from 'path';
 import { TEMPLATE_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 
 function executeMakeElection(electionId, templateFilePath, groupFilePath, electionDir, callback) {
-  execFile('src/scripts/makeElection.sh', [electionId, templateFilePath, groupFilePath, electionDir], (error) => {
+  if (!electionId || !templateFilePath || !groupFilePath || !electionDir) {
+    callback({ status: 'FAILED', error: 'Missing parameter' });
+  }
+  exec(`bash src/scripts/makeElection.sh ${electionId} ${templateFilePath} ${groupFilePath} ${electionDir}`, (error) => {
     if (error) {
       callback({ status: 'FAILED', error });
       return;
@@ -14,10 +17,17 @@ function executeMakeElection(electionId, templateFilePath, groupFilePath, electi
 }
 
 function makeElection(electionId, template, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  if (!template) {
+    callback({ status: 'FAILED', error: 'Invalid template' });
+    return;
+  }
+
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

@@ -4,8 +4,10 @@ import path from 'path';
 import { ELECTIONS_DIR } from '../global';
 
 function createElection(callback) {
+  if (!callback) return;
+
   try {
-    exec('src/scripts/createElection.sh', (error, stdout) => {
+    exec('bash src/scripts/createElection.sh', (error, stdout) => {
       if (error) {
         callback({ status: 'FAILED', error });
         return;

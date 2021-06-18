@@ -4,9 +4,16 @@ import fs from 'fs';
 import { ELECTIONS_DIR } from '../global';
 
 function deleteElection(electionId, callback) {
+  if (!callback) return;
+
+  if (!electionId) {
+    callback({ status: 'FAILED', error: 'Invalid election id' });
+    return;
+  }
+
   try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
-    if (fs.existsSync(electionDir)) {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+    if (electionDir && !fs.existsSync(electionDir)) {
       rimfaf.sync(electionDir);
     }
     callback({ status: 'OK' });

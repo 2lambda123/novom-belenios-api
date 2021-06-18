@@ -3,10 +3,17 @@ import path from 'path';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR, TRUSTEES_FILE_NAME } from '../global';
 
 function setVoters(electionId, voters, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  if (!voters) {
+    callback({ status: 'FAILED', error: 'Invalid voters' });
+    return;
+  }
+
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

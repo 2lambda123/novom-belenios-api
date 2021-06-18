@@ -4,9 +4,9 @@ import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
 
 function verifyVoters(electionId, callback) {
   try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
 
-    if (!fs.existsSync(electionDir)) {
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

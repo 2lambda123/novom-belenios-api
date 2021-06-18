@@ -3,10 +3,12 @@ import path from 'path';
 import { ELECTIONS_DIR } from '../global';
 
 function subscribeElection(electionId, socket, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { execFile } from 'child_process';
+import { exec } from 'child_process';
 import path from 'path';
 import {
   ELECTIONS_DIR,
@@ -13,32 +13,28 @@ function executeCloseElection(privateKeysFileName,
   resultFilePath,
   electionDir,
   callback) {
-  const parameters = [
-    privateKeysFileName,
-    partialDecryptionsFilePath,
-    resultFilePath,
-    electionDir,
-  ];
-
-  execFile('src/scripts/closeElection.sh', parameters, (error, stdout) => {
-    if (error) {
-      callback({ status: 'FAILED', error });
-      return;
-    }
-    const result = JSON.parse(stdout);
-    if (result && result.result) {
-      callback({ status: 'OK', payload: result.result });
-    } else {
-      callback({ status: 'FAILED', payload: 'Invalid result' });
-    }
-  });
+  exec(`bash src/scripts/closeElection.sh ${privateKeysFileName} ${partialDecryptionsFilePath} ${resultFilePath} ${electionDir}`,
+    (error, stdout) => {
+      if (error) {
+        callback({ status: 'FAILED', error });
+        return;
+      }
+      const result = JSON.parse(stdout);
+      if (result && result.result) {
+        callback({ status: 'OK', payload: result.result });
+      } else {
+        callback({ status: 'FAILED', payload: 'Invalid result' });
+      }
+    });
 }
 
 function closeElection(electionId, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

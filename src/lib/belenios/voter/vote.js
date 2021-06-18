@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { execFile } from 'child_process';
+import { exec } from 'child_process';
 import path from 'path';
 import { ELECTIONS_DIR, BALLOTS_FILE_NAME } from '../global';
 
@@ -30,7 +30,7 @@ function saveVote(voteBallot, ballotFilePath) {
 }
 
 function executeVote(privCred, ballot, ballotFilePath, electionDir, callback) {
-  execFile('src/scripts/vote.sh', [privCred, ballot, electionDir], (error, stdout) => {
+  exec(`bash src/scripts/vote.sh ${privCred} ${ballot} ${electionDir}`, (error, stdout) => {
     if (error) {
       console.log(error);
       callback({ status: 'FAILED', error });
@@ -46,9 +46,9 @@ function executeVote(privCred, ballot, ballotFilePath, electionDir, callback) {
 
 function vote(electionId, privCred, ballot, callback) {
   try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
 
-    if (!fs.existsSync(electionDir)) {
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

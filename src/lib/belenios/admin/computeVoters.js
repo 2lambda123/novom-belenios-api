@@ -1,10 +1,10 @@
-import { execFile } from 'child_process';
+import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { ELECTIONS_DIR, PRIVATE_CREDS_FILE_NAME } from '../global';
 
 function executeComputeVoters(electionDir, privCredFilePath, callback) {
-  execFile('src/scripts/computeVoters.sh', [privCredFilePath, electionDir], (error, stdout) => {
+  exec(`bash src/scripts/computeVoters.sh ${privCredFilePath} ${electionDir}`, (error, stdout) => {
     if (error) {
       callback({ status: 'FAILED', error });
       return;
@@ -19,10 +19,12 @@ function executeComputeVoters(electionDir, privCredFilePath, callback) {
 }
 
 function computeVoters(electionId, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }

@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { execFile } from 'child_process';
+import { exec } from 'child_process';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 
 function executeMakeTrustees(electionId, votersFilePath, groupFilePath, electionDir, callback) {
-  execFile('src/scripts/makeTrustees.sh', [electionId, votersFilePath, groupFilePath, electionDir], (error, stdout) => {
+  exec(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${groupFilePath} ${electionDir}`, (error, stdout) => {
     if (error) {
       callback({ status: 'FAILED', error });
       return;
@@ -14,10 +14,12 @@ function executeMakeTrustees(electionId, votersFilePath, groupFilePath, election
 }
 
 function lockVoters(electionId, callback) {
-  try {
-    const electionDir = path.join(ELECTIONS_DIR, electionId);
+  if (!callback) return;
 
-    if (!fs.existsSync(electionDir)) {
+  try {
+    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
+
+    if (!electionDir || !fs.existsSync(electionDir)) {
       callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
       return;
     }
