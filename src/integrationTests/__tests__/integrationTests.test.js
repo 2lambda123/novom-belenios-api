@@ -231,14 +231,14 @@ describe('Integration test', () => {
     expect(result.payload).toEqual([[102, 0], [1, 101, 0]]);
   });
 
-  // Scenario #3 - Async vote with 100 voters - Voting table
+  // Scenario #3 - Async vote with 5 voters - Voting table
   // |---------------------------------------------------------------------------------------|
   // | USER                    | VOTE                * WEIGHT  =   EXPECTED RESULT           |
   // |---------------------------------------------------------------------------------------|
   // | voterX,...voterX + N    | [[1, 0], [1, 0, 0]] * 1       =   [[1,    0], [1,   0, 0]]  |
-  // | Total                   |                               =   [[100,  0], [100, 0, 0]]  |
+  // | Total                   |                               =   [[5,  0],   [5, 0,   0]]  |
   // |---------------------------------------------------------------------------------------|
-  test('Scenario #3 - Async vote - 100 voters', async () => {
+  test('Scenario #3 - Async vote - 5 voters', async () => {
     jest.setTimeout(60000);
 
     const template = {
@@ -251,7 +251,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 100;
+    const nbVoters = 5;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
@@ -287,19 +287,19 @@ describe('Integration test', () => {
     const result = await electionLifeCycleAsync(adminSocket, userList, template, votingScenario);
     expect(result).toBeDefined();
     expect(result.status).toEqual('OK');
-    expect(result.payload).toEqual([[100, 0], [100, 0, 0]]);
+    expect(result.payload).toEqual([[5, 0], [5, 0, 0]]);
   });
 
-  // Scenario #4 - Async vote with 10 voters that votes 3 times (Only the last vote count)
+  // Scenario #4 - Async vote with 5 voters that votes 3 times (Only the last vote count)
   // |---------------------------------------------------------------------------------------|
   // | USER                    | VOTE                * WEIGHT  =   EXPECTED RESULT           |
   // |---------------------------------------------------------------------------------------|
   // | voterX,...voterX + N    | [[1, 0], [0, 0, 1]] * 1       =   [[1,    0], [0,  0, 1]]   |
   // | voterX,...voterX + N    | [[0, 1], [0, 1, 0]] * 1       =   [[1,    0], [0,  1, 0]]   |
   // | voterX,...voterX + N    | [[1, 0], [1, 0, 0]] * 1       =   [[1,    0], [1,  0, 0]]   |
-  // | Total                   |                               =   [[10,  0],  [10, 0, 0]]   |
+  // | Total                   |                               =   [[5,  0],   [5, 0,  0]]   |
   // |---------------------------------------------------------------------------------------|
-  test('Scenario #4 - Async vote - 10 voters that votes 3 times', async () => {
+  test('Scenario #4 - Async vote - 5 voters that votes 3 times', async () => {
     jest.setTimeout(60000);
 
     const template = {
@@ -312,7 +312,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 10;
+    const nbVoters = 5;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
@@ -364,17 +364,17 @@ describe('Integration test', () => {
     const result = await electionLifeCycleAsync(adminSocket, userList, template, votingScenario);
     expect(result).toBeDefined();
     expect(result.status).toEqual('OK');
-    expect(result.payload).toEqual([[10, 0], [10, 0, 0]]);
+    expect(result.payload).toEqual([[5, 0], [5, 0, 0]]);
   });
 
-  // Scenario #5 - Async vote with 10 voters - Voting table
+  // Scenario #5 - Async vote with 5 voters - Voting table
   // |---------------------------------------------------------------------------------------|
   // | USER                    | VOTE                * WEIGHT  =   EXPECTED RESULT           |
   // |---------------------------------------------------------------------------------------|
   // | voterX,...voterX + N    | [[1, 0], [1, 0, 0]] * 1       =   [[1,    0], [1,   0, 0]]  |
-  // | Total                   |                               =   [[10,  0],   [10, 0, 0]]  |
+  // | Total                   |                               =   [[5,    0], [5,   0, 0]]  |
   // |---------------------------------------------------------------------------------------|
-  test('Scenario #5 - Async vote - 25 voters - 5 simultaneous elections', async () => {
+  test('Scenario #5 - Async vote - 5 voters - 3 simultaneous elections', async () => {
     jest.setTimeout(60000);
 
     const template = {
@@ -387,7 +387,7 @@ describe('Integration test', () => {
       }],
     };
 
-    const nbVoters = 10;
+    const nbVoters = 5;
     const userList = [];
 
     for (let i = 0; i < nbVoters; i += 1) {
@@ -434,7 +434,7 @@ describe('Integration test', () => {
     results.forEach((result) => {
       expect(result).toBeDefined();
       expect(result.status).toEqual('OK');
-      expect(result.payload).toEqual([[10, 0], [10, 0, 0]]);
+      expect(result.payload).toEqual([[5, 0], [5, 0, 0]]);
     });
   });
 });
