@@ -23,4 +23,6 @@ COPY ./src ./src
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./src
 
+EXPOSE 3000
+
 CMD ["node", "./src/Server.js"]
