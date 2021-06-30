@@ -13,7 +13,7 @@ function deleteElection(electionId, callback) {
 
   try {
     const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
-    if (electionDir && !fs.existsSync(electionDir)) {
+    if (electionDir && fs.existsSync(electionDir)) {
       rimfaf.sync(electionDir);
     }
     callback({ status: 'OK' });
