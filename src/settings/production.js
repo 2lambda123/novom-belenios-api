@@ -1,5 +1,5 @@
 const settings = {
-  port: 3000,
+  port: 80,
 };
 
 export default settings;
