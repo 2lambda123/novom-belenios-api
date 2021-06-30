@@ -84,10 +84,10 @@ const createServer = (port = 3000) => {
   });
 
   setInterval(() => {
-    votingQueue.splice(0, 25).forEach(({ func, params }) => {
+    votingQueue.splice(0, 5).forEach(({ func, params }) => {
       func(...params);
     });
-  }, 1000);
+  }, 500);
 
   console.log(`Server started on port ${port}`);
 };
