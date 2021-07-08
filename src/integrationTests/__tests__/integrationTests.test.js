@@ -102,8 +102,6 @@ describe('Integration test', () => {
   // | Total      |                               =   [[102,  0], [1, 101, 0]] |
   // |-------------------------------------------------------------------------|
   test('Scenario #1 - Sync vote', (done) => {
-    jest.setTimeout(60000);
-
     const template = {
       description: 'Description of the election.',
       name: 'Name of the election',
@@ -176,8 +174,6 @@ describe('Integration test', () => {
   // | Total      |                               =   [[102,  0], [1, 101, 0]] |
   // |-------------------------------------------------------------------------|
   test('Scenario #2 - Async vote', async () => {
-    jest.setTimeout(60000);
-
     const template = {
       description: 'Description of the election.',
       name: 'Name of the election',
@@ -239,8 +235,6 @@ describe('Integration test', () => {
   // | Total                   |                               =   [[5,  0],   [5, 0,   0]]  |
   // |---------------------------------------------------------------------------------------|
   test('Scenario #3 - Async vote - 5 voters', async () => {
-    jest.setTimeout(60000);
-
     const template = {
       description: 'Description of the election.',
       name: 'Name of the election',
@@ -300,8 +294,6 @@ describe('Integration test', () => {
   // | Total                   |                               =   [[5,  0],   [5, 0,  0]]   |
   // |---------------------------------------------------------------------------------------|
   test('Scenario #4 - Async vote - 5 voters that votes 3 times', async () => {
-    jest.setTimeout(60000);
-
     const template = {
       description: 'Description of the election.',
       name: 'Name of the election',
@@ -375,8 +367,6 @@ describe('Integration test', () => {
   // | Total                   |                               =   [[5,    0], [5,   0, 0]]  |
   // |---------------------------------------------------------------------------------------|
   test('Scenario #5 - Async vote - 5 voters - 3 simultaneous elections', async () => {
-    jest.setTimeout(60000);
-
     const template = {
       description: 'Description of the election.',
       name: 'Name of the election',
