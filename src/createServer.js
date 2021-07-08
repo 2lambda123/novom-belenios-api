@@ -12,7 +12,6 @@ import makeElection from './lib/belenios/admin/makeElection';
 import joinElection from './lib/belenios/voter/joinElection';
 import vote from './lib/belenios/voter/vote';
 import closeElection from './lib/belenios/admin/closeElection';
-import subscribeElection from './lib/belenios/admin/subscribeElection';
 import computeVoters from './lib/belenios/admin/computeVoters';
 import deleteElection from './lib/belenios/admin/deleteElection';
 import { ELECTIONS_DIR } from './lib/belenios/global';
@@ -54,8 +53,10 @@ const createServer = (port = 3000) => {
     socket.on('verify-voters', verifyVoters);
     socket.on('lock-voters', lockVoters);
     socket.on('make-election', makeElection);
-    socket.on('subscribe-election', (electionId, callback) => {
-      subscribeElection(electionId, socket, callback);
+    socket.on('get-voters-count', (electionId, callback) => {
+      const voters = io.of('/voter').adapter.rooms.get(electionId);
+      const votersCount = voters ? voters.size : 0;
+      callback({ status: 'OK', payload: { nbActiveVoters: votersCount } });
     });
     socket.on('compute-voters', computeVoters);
     socket.on('close-election', closeElection);
@@ -64,14 +65,6 @@ const createServer = (port = 3000) => {
 
   io.of('/voter').use((socket, next) => {
     authHelper(socket, 'voter', next);
-  });
-
-  io.of('/voter').adapter.on('create-room', (room) => {
-    setInterval(() => {
-      const voters = io.of('/voter').adapter.rooms.get(room);
-      const votersCount = voters ? voters.size : 0;
-      io.of('/admin').to(room).emit('voters-count-update', { votersCount });
-    }, 1000);
   });
 
   io.of('/voter').on('connection', (socket) => {
