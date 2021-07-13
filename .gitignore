@@ -104,3 +104,4 @@ dist
 .tern-port
 dependencies/belenios/_build
 elections
+belenios-ballot-lambda/dependencies/belenios/_build
