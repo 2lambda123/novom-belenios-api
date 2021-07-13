@@ -102,6 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
-dependencies/belenios/_build
-elections
+
+belenios-api/elections
 belenios-ballot-lambda/dependencies/belenios/_build
+belenios-api/dependencies/belenios/_build
