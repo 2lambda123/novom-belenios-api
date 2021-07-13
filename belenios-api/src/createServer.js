@@ -16,6 +16,7 @@ import computeVoters from './lib/belenios/admin/computeVoters';
 import deleteElection from './lib/belenios/admin/deleteElection';
 import { ELECTIONS_DIR } from './lib/belenios/global';
 import log from './log';
+import voteEncryptedBallot from './lib/belenios/voter/voteEncryptedBallot';
 
 const createServer = (port = 3000) => {
   const expressApp = express();
@@ -75,6 +76,7 @@ const createServer = (port = 3000) => {
     socket.on('vote', (electionId, ballot, callback) => {
       votingQueue.push({ func: vote, params: [electionId, socket.privCred, ballot, callback] });
     });
+    socket.on('encrypted-vote', voteEncryptedBallot);
   });
 
   setInterval(() => {
