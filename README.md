@@ -26,7 +26,6 @@ either manually or using GitHub's `Squash and merge` feature.
 
 You must use the following Style Guides :
 
-* [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)
 * [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 
 This project contains a linting config, you should setup `eslint` into your IDE with `.eslintrc.js`.
