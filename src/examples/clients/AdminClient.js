@@ -12,20 +12,24 @@ const template = {
 };
 
 const votersList = [];
-const nbVoters = 10000;
+const nbVoters = 300;
 
 for (let i = 0; i < nbVoters; i += 1) {
   votersList.push({ id: `voter${i}`, weight: 1 });
 }
 
-const socket = io('http://localhost:8043/admin', {
+const url = 'http://localhost:8043/admin';
+
+console.log('Url: ', url);
+
+const socket = io(url, {
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 12,
+        expiresIn: 30,
       },
     ),
   },
@@ -46,6 +50,7 @@ socket.on('connect', () => {
         console.log('verify-voters', verifyVoters);
         socket.emit('lock-voters', createElection.payload, (lockVoters) => {
           console.log('lock-voters', lockVoters);
+          console.log(JSON.stringify(template));
           socket.emit('make-election', createElection.payload, JSON.stringify(template), (makeElection) => {
             console.log('make-election', makeElection);
           });
@@ -60,7 +65,7 @@ socket.on('connect', () => {
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 10,
+        expiresIn: 15,
       },
     ), ({ status }) => { console.log(status); });
   }, 8000);

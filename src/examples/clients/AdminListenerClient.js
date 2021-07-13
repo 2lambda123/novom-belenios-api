@@ -1,16 +1,20 @@
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
 
-const DEFAULT_EVENT_ID = 'eHCZDaa9jgBXuZ';
+const DEFAULT_EVENT_ID = '2uKHhtY8Nhz9o9';
+const url = 'http://localhost:8043/admin';
 
-const socket = io('http://localhost:8043/admin', {
+console.log('Url: ', url);
+console.log('Event: ', DEFAULT_EVENT_ID);
+
+const socket = io(url, {
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 12,
+        expiresIn: 60,
       },
     ),
   },
@@ -23,17 +27,17 @@ socket.on('connect_error', (err) => {
 
 socket.on('connect', () => {
   console.log('connected');
-  socket.emit('subscribe-election', DEFAULT_EVENT_ID, (joinElection) => {
-    console.log('subscribe-election', joinElection);
-    setInterval(() => {
-      socket.emit('compute-voters', DEFAULT_EVENT_ID, (computeVoters) => {
-        console.log('compute-voters', computeVoters);
-      });
-    }, 8000);
-  });
+  setInterval(() => {
+    socket.emit('compute-voters', DEFAULT_EVENT_ID, (computeVoters) => {
+      console.log('compute-voters', computeVoters);
+    });
+    socket.emit('get-active-voters', DEFAULT_EVENT_ID, (computeVoters) => {
+      console.log('compute-voters', computeVoters);
+    });
+  }, 20000);
 
   socket.on('voters-count-update', (voterCount) => {
-    console.log('subscribe-election', voterCount);
+    console.log(voterCount);
   });
 
   setInterval(() => {
@@ -42,7 +46,7 @@ socket.on('connect', () => {
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
-        expiresIn: 10,
+        expiresIn: 15,
       },
     ), ({ status }) => { console.log(status); });
   }, 8000);
