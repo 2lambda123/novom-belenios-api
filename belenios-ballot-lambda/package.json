@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "yarn clean && babel ./src --out-dir dist",
-    "clean": "rm -rf ./dist && mkdir dist"
+    "clean": "rm -rf ./dist && mkdir dist",
+    "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

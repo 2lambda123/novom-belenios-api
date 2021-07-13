@@ -1,5 +1,3 @@
-# https://docs.aws.amazon.com/lambda/latest/dg/images-create.html
-
 # ---------- Base ----------
 FROM frolvlad/alpine-glibc:alpine-3.9_glibc-2.29 AS base
 WORKDIR /app
@@ -28,6 +26,8 @@ FROM base AS builder
 COPY package*.json .babelrc ./
 RUN yarn install
 COPY ./src ./src
+COPY ./dependencies ./dependencies
+RUN yarn setup
 RUN yarn build
 RUN yarn install --production
 
