@@ -1,5 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { setTimeout, clearTimeout } from 'long-timeout';
+import log from './log';
 
 const setTokenExpiredTimeout = (socket, tokenExpiration, timeoutHandle) => {
   const theSocket = socket;
@@ -35,7 +36,7 @@ export default function onDataChannelClientConnected(socket, namespace, next) {
       { algorithms: [process.env.JWT_ALGO] },
       (err, payload) => {
         if (err) {
-          console.log(`Error refreshing token: ${err}`);
+          log('error', `Error refreshing token: ${err}`);
           callback({ status: 'FAILED', errCode: 'INVALID_AUTH_TOKEN', errMessage: err.message });
           return;
         }

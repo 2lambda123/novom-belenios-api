@@ -2,6 +2,7 @@ import rimfaf from 'rimraf';
 import path from 'path';
 import fs from 'fs';
 import { ELECTIONS_DIR } from '../global';
+import log from '../../../log';
 
 function deleteElection(electionId, callback) {
   if (!callback) return;
@@ -18,7 +19,7 @@ function deleteElection(electionId, callback) {
     }
     callback({ status: 'OK' });
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

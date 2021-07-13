@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import jsonwebtoken from 'jsonwebtoken';
 
 console.log('Admin token:');

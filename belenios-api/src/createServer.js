@@ -15,6 +15,7 @@ import closeElection from './lib/belenios/admin/closeElection';
 import computeVoters from './lib/belenios/admin/computeVoters';
 import deleteElection from './lib/belenios/admin/deleteElection';
 import { ELECTIONS_DIR } from './lib/belenios/global';
+import log from './log';
 
 const createServer = (port = 3000) => {
   const expressApp = express();
@@ -82,7 +83,7 @@ const createServer = (port = 3000) => {
     });
   }, 500);
 
-  console.log(`Server started on port ${port}`);
+  log('info', `Server started on port ${port}`);
 };
 
 export default createServer;

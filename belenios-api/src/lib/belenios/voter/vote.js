@@ -2,6 +2,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import path from 'path';
 import { ELECTIONS_DIR, BALLOTS_FILE_NAME } from '../global';
+import log from '../../../log';
 
 function saveVote(voteBallot, ballotFilePath) {
   const publicKey = voteBallot.signature.public_key;
@@ -32,7 +33,7 @@ function saveVote(voteBallot, ballotFilePath) {
 function executeVote(privCred, ballot, ballotFilePath, electionDir, callback) {
   exec(`bash src/scripts/vote.sh ${privCred} ${ballot} ${electionDir}`, (error, stdout) => {
     if (error) {
-      console.log(error);
+      log('error', error);
       callback({ status: 'FAILED', error });
       return;
     }
@@ -57,7 +58,7 @@ function vote(electionId, privCred, ballot, callback) {
 
     executeVote(privCred, ballot, ballotFilePath, electionDir, callback);
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

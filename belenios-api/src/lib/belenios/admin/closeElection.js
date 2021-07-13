@@ -7,6 +7,7 @@ import {
   PRIV_KEYS_FILE_NAME,
   RESULT_FILE_NAME,
 } from '../global';
+import log from '../../../log';
 
 function executeCloseElection(privateKeysFileName,
   partialDecryptionsFilePath,
@@ -49,7 +50,7 @@ function closeElection(electionId, callback) {
       electionDir,
       callback);
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

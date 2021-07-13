@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import log from '../../../log';
 import { ELECTIONS_DIR, PRIVATE_CREDS_FILE_NAME } from '../global';
 
 function executeComputeVoters(electionDir, privCredFilePath, callback) {
@@ -33,7 +34,7 @@ function computeVoters(electionId, callback) {
 
     executeComputeVoters(electionDir, privCredFilePath, callback);
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

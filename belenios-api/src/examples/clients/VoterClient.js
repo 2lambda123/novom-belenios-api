@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
 

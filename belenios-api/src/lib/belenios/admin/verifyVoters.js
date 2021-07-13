@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import log from '../../../log';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
 
 function verifyVoters(electionId, callback) {
@@ -33,7 +34,7 @@ function verifyVoters(electionId, callback) {
 
     callback({ status: 'OK', payload: voters });
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error });
   }
 }

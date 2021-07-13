@@ -2,6 +2,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import path from 'path';
 import { TEMPLATE_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
+import log from '../../../log';
 
 function executeMakeElection(electionId, templateFilePath, groupFilePath, electionDir, callback) {
   if (!electionId || !templateFilePath || !groupFilePath || !electionDir) {
@@ -41,7 +42,7 @@ function makeElection(electionId, template, callback) {
       executeMakeElection(electionId, templateFilePath, GROUP_FILE_PATH, electionDir, callback);
     });
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import log from '../../../log';
 import { ELECTIONS_DIR, PRIVATE_CREDS_FILE_NAME } from '../global';
 
 function joinElection(electionId, userId, socket, callback) {
@@ -34,7 +35,7 @@ function joinElection(electionId, userId, socket, callback) {
 
     callback({ status: 'OK' });
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }

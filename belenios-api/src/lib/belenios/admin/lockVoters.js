@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
+import log from '../../../log';
 
 function executeMakeTrustees(electionId, votersFilePath, groupFilePath, electionDir, callback) {
   exec(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${groupFilePath} ${electionDir}`, (error, stdout) => {
@@ -33,7 +34,7 @@ function lockVoters(electionId, callback) {
 
     executeMakeTrustees(electionId, votersFilePath, GROUP_FILE_PATH, electionDir, callback);
   } catch (error) {
-    console.log(error);
+    log('error', error);
     callback({ status: 'FAILED', error: error.message });
   }
 }
