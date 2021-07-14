@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import log from '../../../log';
-import { ELECTIONS_DIR, PRIVATE_CREDS_FILE_NAME } from '../global';
+import {
+  ELECTIONS_DIR, ELECTION_FILE_NAME, PRIVATE_CREDS_FILE_NAME, TRUSTEES_FILE_NAME,
+} from '../global';
 
 function joinElection(electionId, userId, socket, callback) {
   try {
@@ -25,7 +27,7 @@ function joinElection(electionId, userId, socket, callback) {
     const userCred = user.length === 1 ? user[0].split(' ')[1] : undefined;
 
     if (!userCred) {
-      callback({ status: 'FAILED', error: 'Voters' });
+      callback({ status: 'FAILED', error: 'Voter not found.' });
       return;
     }
 
@@ -33,7 +35,10 @@ function joinElection(electionId, userId, socket, callback) {
     // eslint-disable-next-line no-param-reassign
     socket.privCred = userCred;
 
-    callback({ status: 'OK' });
+    const election = fs.readFileSync(path.join(electionDir, TRUSTEES_FILE_NAME), 'utf8');
+    const trustees = fs.readFileSync(path.join(electionDir, ELECTION_FILE_NAME), 'utf8');
+
+    callback({ status: 'OK', payload: { election, trustees, privCred: userCred } });
   } catch (error) {
     log('error', error);
     callback({ status: 'FAILED', error: error.message });

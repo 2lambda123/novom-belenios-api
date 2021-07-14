@@ -137,9 +137,14 @@ Take a look at 'belenios-api/src/examples/clients' to get started on Belenios AP
   * Join an election.
   * Parameters:
     * electionId : Id of the election.   ex: `'hP3Dv8r5PWszwB'`
+    * userId : Id of the voter.   ex: `'voter1'`
     * callback : Callback function.
   * Returns:
-    * status: Status of the action  (`'FAILED' | 'OK'`)  
+    * status: Status of the action  (`'FAILED' | 'OK'`)
+    * payload:
+      * election: Election information.
+      * trustees: Trustees information.
+      * privCred: Private credential of the voter for this election.
     * error: Error message.
 * **vote**
   * Add a ballot to an election.
@@ -148,14 +153,14 @@ Take a look at 'belenios-api/src/examples/clients' to get started on Belenios AP
     * callback : Callback function.
   * Returns:
     * status: Status of the action  (`'FAILED' | 'OK'`)
-    * payload:
+    * ballot : Election ballot.
     * error: Error message.
 * **encrypted-vote**
   * Add a encrypted ballot to an election.
   * Parameters:
     * electionId : Id of the election.   ex: `'hP3Dv8r5PWszwB'`
+    * ballot : Encrypted election ballot.
     * callback : Callback function.
   * Returns:
     * status: Status of the action  (`'FAILED' | 'OK'`)  
-    * payload:
     * error: Error message.
