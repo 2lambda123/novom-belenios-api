@@ -24,7 +24,7 @@ function executeCloseElection(privateKeysFileName,
       if (result && result.result) {
         callback({ status: 'OK', payload: result.result });
       } else {
-        callback({ status: 'FAILED', payload: 'Invalid result' });
+        callback({ status: 'FAILED', payload: 'Invalid results' });
       }
     });
 }

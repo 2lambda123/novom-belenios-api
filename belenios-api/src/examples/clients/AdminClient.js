@@ -51,7 +51,6 @@ socket.on('connect', () => {
         console.log('verify-voters', verifyVoters);
         socket.emit('lock-voters', createElection.payload, (lockVoters) => {
           console.log('lock-voters', lockVoters);
-          console.log(JSON.stringify(template));
           socket.emit('make-election', createElection.payload, JSON.stringify(template), (makeElection) => {
             console.log('make-election', makeElection);
           });

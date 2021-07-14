@@ -10,14 +10,14 @@
     "start:adminClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/AdminClient",
     "start:adminListenerClient": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/AdminListenerClient",
     "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios",
-    "gen-token": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/generateToken",
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "jest --runInBand",
     "test:lint": "eslint src",
+    "gen-token": "JWT_SECRET='hii' JWT_ALGO='HS256' nodemon --watch src --exec babel-node src/examples/clients/generateToken",
     "grant-access": "sudo chmod -R a+rwx *",
+    "start:build": "node ./dist/Server.js",
     "wipeout": "rm -r elections/*",
     "build": "yarn clean && babel ./src --out-dir dist",
-    "start:build": "node ./dist/Server.js",
     "clean": "rm -rf ./dist && mkdir dist"
   },
   "dependencies": {

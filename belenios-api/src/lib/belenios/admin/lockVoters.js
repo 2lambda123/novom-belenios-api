@@ -10,7 +10,7 @@ function executeMakeTrustees(electionId, votersFilePath, groupFilePath, election
       callback({ status: 'FAILED', error });
       return;
     }
-    callback({ status: 'OK', payload: stdout });
+    callback({ status: 'OK' });
   });
 }
 
