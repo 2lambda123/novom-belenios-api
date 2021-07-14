@@ -5,7 +5,7 @@ import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 import log from '../../../log';
 
 function executeMakeTrustees(electionId, votersFilePath, groupFilePath, electionDir, callback) {
-  exec(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${groupFilePath} ${electionDir}`, (error, stdout) => {
+  exec(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${groupFilePath} ${electionDir}`, (error) => {
     if (error) {
       callback({ status: 'FAILED', error });
       return;

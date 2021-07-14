@@ -26,10 +26,6 @@ For more information about the Belenios voting system you can refer to this repo
 * Unit Tests: `yarn test:unit`
 * Both: `yarn test`
 
-### Examples
-
-You can refer to [examples](https://github.com/novom/belenios/issues) to get started on how to call the API.
-
 ## Contributing
 
 **Never** commit directly on master, instead use branches and pull requests.
@@ -49,6 +45,8 @@ Please refer to the [Issues](https://github.com/novom/belenios/issues) section
 if you encounter any problems during development.
 
 ## API Actions
+
+Take a look at 'belenios-api/src/examples/clients' to get started on Belenios API client creation.
 
 ### Admin
 

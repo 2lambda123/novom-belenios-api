@@ -1,3 +1,8 @@
+//--------------------------------------------------------------------------------
+// AdminCLient
+// Example of an admin client that create an election.
+//--------------------------------------------------------------------------------
+
 /* eslint-disable no-console */
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
@@ -12,6 +17,7 @@ const template = {
   }],
 };
 
+const url = 'http://localhost:8043/admin';
 const votersList = [];
 const nbVoters = 300;
 
@@ -19,8 +25,7 @@ for (let i = 0; i < nbVoters; i += 1) {
   votersList.push({ id: `voter${i}`, weight: 1 });
 }
 
-const url = 'http://localhost:8043/admin';
-
+console.log('Admin Client');
 console.log('Url: ', url);
 
 const socket = io(url, {

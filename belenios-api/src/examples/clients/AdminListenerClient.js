@@ -1,10 +1,16 @@
+//--------------------------------------------------------------------------------
+// AdminCLient
+// Example of an admin client that output election progression.
+//--------------------------------------------------------------------------------
+
 /* eslint-disable no-console */
 import io from 'socket.io-client';
 import jsonwebtoken from 'jsonwebtoken';
 
-const DEFAULT_EVENT_ID = '2uKHhtY8Nhz9o9';
+const DEFAULT_EVENT_ID = 'P2N684xYV1CQ2j';
 const url = 'http://localhost:8043/admin';
 
+console.log('Admin Listener Client');
 console.log('Url: ', url);
 console.log('Event: ', DEFAULT_EVENT_ID);
 
@@ -32,14 +38,10 @@ socket.on('connect', () => {
     socket.emit('compute-voters', DEFAULT_EVENT_ID, (computeVoters) => {
       console.log('compute-voters', computeVoters);
     });
-    socket.emit('get-active-voters', DEFAULT_EVENT_ID, (computeVoters) => {
-      console.log('compute-voters', computeVoters);
+    socket.emit('get-voters-count', DEFAULT_EVENT_ID, (getActiveVoters) => {
+      console.log('get-voters-count', getActiveVoters);
     });
-  }, 20000);
-
-  socket.on('voters-count-update', (voterCount) => {
-    console.log(voterCount);
-  });
+  }, 2000);
 
   setInterval(() => {
     socket.emit('refreshAuthToken', jsonwebtoken.sign(
