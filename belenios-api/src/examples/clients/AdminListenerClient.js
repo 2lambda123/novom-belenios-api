@@ -15,6 +15,7 @@ console.log('Url: ', url);
 console.log('Event: ', DEFAULT_EVENT_ID);
 
 const socket = io(url, {
+  rejectUnauthorized: false,
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },

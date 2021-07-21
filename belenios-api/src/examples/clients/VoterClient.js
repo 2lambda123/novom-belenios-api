@@ -17,6 +17,7 @@ console.log('Election: ', DEFAULT_ELECTION_ID);
 console.log('Voter: ', voter);
 
 const socket = io(url, {
+  rejectUnauthorized: false,
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { ticketId: 'invitationId' } },

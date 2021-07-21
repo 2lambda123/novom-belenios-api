@@ -29,6 +29,7 @@ console.log('Admin Client');
 console.log('Url: ', url);
 
 const socket = io(url, {
+  rejectUnauthorized: false,
   auth: {
     authToken: jsonwebtoken.sign(
       { extraPayload: { accessScope: { event: { action: ['edit'] } } } },

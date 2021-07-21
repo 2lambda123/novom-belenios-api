@@ -1,5 +1,6 @@
 const settings = {
-  port: 80,
+  port: 443,
+  https: true,
 };
 
 export default settings;

@@ -1,5 +1,6 @@
 import express from 'express';
 import socketIO from 'socket.io';
+import https from 'https';
 import http from 'http';
 import fs from 'fs';
 
@@ -17,12 +18,26 @@ import deleteElection from './lib/belenios/admin/deleteElection';
 import { ELECTIONS_DIR } from './lib/belenios/global';
 import log from './log';
 import voteEncryptedBallot from './lib/belenios/voter/voteEncryptedBallot';
+import settings from './lib/settings';
 
 const createServer = (port = 3000) => {
   const expressApp = express();
+
+  let server;
+
+  if (settings.https) {
+    const options = {
+      key: fs.readFileSync(`${__dirname}/key.pem`),
+      cert: fs.readFileSync(`${__dirname}/cert.pem`),
+    };
+    server = https.createServer(options, expressApp);
+  } else {
+    server = http.Server(expressApp);
+  }
+
   const router = express.Router();
-  const httpServer = http.Server(expressApp);
-  const io = socketIO(httpServer, {
+
+  const io = socketIO(server, {
     cors: {
       origin: '*',
       methods: ['GET', 'POST'],
@@ -43,7 +58,7 @@ const createServer = (port = 3000) => {
 
   expressApp.use('/', router);
 
-  httpServer.listen(port);
+  server.listen(port);
 
   io.of('/admin').use((socket, next) => {
     authHelper(socket, 'admin', next);
@@ -85,7 +100,9 @@ const createServer = (port = 3000) => {
     });
   }, 500);
 
-  log('info', `Server started on port ${port}`);
+  log('info', 'Server started');
+  log('info', `Port: ${port}`);
+  log('info', `https: ${settings.https}`);
 };
 
 export default createServer;
