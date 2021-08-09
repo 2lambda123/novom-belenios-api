@@ -4,9 +4,11 @@
   "description": "",
   "license": "AGPL-3.0-only",
   "dependencies": {
-    "babel-eslint": "^10.1.0"
+    "babel-eslint": "^10.1.0",
+    "moment": "^2.29.1"
   },
   "scripts": {
+    "deploy": "sam build && sam deploy --guided",
     "build": "yarn clean && babel ./src --out-dir dist",
     "clean": "rm -rf ./dist && mkdir dist",
     "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios"
