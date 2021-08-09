@@ -4,7 +4,7 @@
 
 An api wrapping the belenios-tool command line.
 
-For more information about the Belenios voting system you can refer to this repository [Belenios](https://gitlab.inria.fr/belenios/belenios)).
+For more information about the Belenios voting system you can refer to this repository [Belenios](https://gitlab.inria.fr/belenios/belenios).
 
 ## Prerequisites
 
