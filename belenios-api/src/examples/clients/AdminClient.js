@@ -32,7 +32,7 @@ const socket = io(url, {
   rejectUnauthorized: false,
   auth: {
     authToken: jsonwebtoken.sign(
-      { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
+      { extraPayload: { accessScope: { event: { actions: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
@@ -67,7 +67,7 @@ socket.on('connect', () => {
 
   setInterval(() => {
     socket.emit('refreshAuthToken', jsonwebtoken.sign(
-      { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
+      { extraPayload: { accessScope: { event: { actions: ['edit'] } } } },
       process.env.JWT_SECRET,
       {
         algorithm: process.env.JWT_ALGO,
