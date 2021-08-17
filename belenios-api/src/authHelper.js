@@ -40,7 +40,7 @@ export default function onDataChannelClientConnected(socket, namespace, next) {
           callback({ status: 'FAILED', errCode: 'INVALID_AUTH_TOKEN', errMessage: err.message });
           return;
         }
-        if (theSocket.role === 'admin' && !payload.extraPayload?.accessScope?.event?.action?.find((action) => action.match(/^all$|^edit$/))) {
+        if (theSocket.role === 'admin' && !payload.extraPayload?.accessScope?.event?.actions?.find((action) => action.match(/^all$|^edit$/))) {
           callback({ status: 'FAILED', errCode: 'INVALID_AUTH_TOKEN_PAYLOAD', errMessage: 'The admin token should contain a "extraPayload.accessScope.event.action" attribute' });
           return;
         }
@@ -74,8 +74,8 @@ export default function onDataChannelClientConnected(socket, namespace, next) {
         return;
       }
 
-      if (namespace === 'admin' && !payload?.extraPayload?.accessScope?.event?.action?.find((action) => action.match(/^all$|^edit$/))) {
-        next(new Error('The admin token should contain a "extraPayload.accessScope.event.action" attribute'));
+      if (namespace === 'admin' && !payload?.extraPayload?.accessScope?.event?.actions?.find((action) => action.match(/^all$|^edit$/))) {
+        next(new Error('The admin token should contain a "extraPayload.accessScope.event.actions" attribute'));
         return;
       }
 

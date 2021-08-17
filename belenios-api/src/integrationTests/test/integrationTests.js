@@ -32,7 +32,7 @@ describe('Integration test', () => {
     const socket = io(`http://localhost:${port}/admin`, {
       auth: {
         authToken: jsonwebtoken.sign(
-          { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
+          { extraPayload: { accessScope: { event: { actions: ['edit'] } } } },
           process.env.JWT_SECRET,
           {
             algorithm: process.env.JWT_ALGO,

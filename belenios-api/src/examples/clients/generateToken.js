@@ -3,7 +3,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 console.log('Admin token:');
 console.log(jsonwebtoken.sign(
-  { extraPayload: { accessScope: { event: { action: ['edit'] } } } },
+  { extraPayload: { accessScope: { event: { actions: ['edit'] } } } },
   process.env.JWT_SECRET,
   {
     algorithm: process.env.JWT_ALGO,
