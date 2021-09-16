@@ -1,0 +1,22 @@
+type Vote {
+  id: String!
+  electionId: String!
+  ballot: String!
+  voterId: String!
+}
+
+input VoteInput {
+  id: String!
+  electionId: String!
+  vote: String!
+  voterId: String!
+}
+
+extend type Query {
+  getVote(id: String): Vote
+  getAllElectionVotes(electionId: String): [Vote]
+}
+
+extend type Mutation {
+  vote(vote: VoteInput): String
+}
