@@ -1,0 +1,51 @@
+service: belenios-api
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  lambdaHashingVersion: 20201221
+  ecr:
+    images:
+      belenios-api:
+        path: ./
+  environment:
+    DYNAMODB_REGION: ${opt:region, self:provider.region}
+    DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-elections
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_ELECTION_TABLE}"
+
+functions:
+  graphql:
+    image:
+      name: ${self:service}
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+      - http:
+          path: /
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    electionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_ELECTION_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
