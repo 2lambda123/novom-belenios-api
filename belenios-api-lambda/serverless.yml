@@ -11,14 +11,17 @@ provider:
         path: ./
   environment:
     DYNAMODB_REGION: ${opt:region, self:provider.region}
-    DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-elections
+    DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-election
+    DYNAMODB_VOTE_TABLE: ${self:service}-${sls:stage}-vote
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_ELECTION_TABLE}"
+      Resource: 
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_ELECTION_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_VOTE_TABLE}"
 
 functions:
   graphql:
@@ -36,10 +39,23 @@ functions:
 
 resources:
   Resources:
-    electionsTable:
+    electionTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_ELECTION_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    voteTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_VOTE_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
