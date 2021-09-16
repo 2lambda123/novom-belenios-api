@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "@babel/plugin-proposal-optional-chaining",
+    "import-graphql"
+  ],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ]
+}
