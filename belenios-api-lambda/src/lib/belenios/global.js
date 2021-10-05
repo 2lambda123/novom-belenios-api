@@ -8,5 +8,6 @@ export const VOTERS_FILE_NAME = 'voters.txt';
 export const PRIVATE_CREDS_FILE_NAME = 'private_creds.txt';
 export const BALLOTS_FILE_NAME = 'ballots.jsons';
 export const PRIV_KEYS_FILE_NAME = 'private_keys.jsons';
+export const PUBBLIC_CREDS_FILE_NAME = 'public_creds.txt';
 export const PARTIAL_DECRYPTIONS_FILE_NAME = 'partial_decryptions.jsons';
 export const RESULT_FILE_NAME = 'result.json';
