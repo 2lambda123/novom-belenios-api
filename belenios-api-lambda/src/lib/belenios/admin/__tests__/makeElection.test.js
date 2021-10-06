@@ -16,63 +16,32 @@ const DEFAULT_TEMPLATE = {
 
 describe('Tests makeElection', () => {
   describe('Election not created yet.', () => {
-    it('Should return FAILED.', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      makeElection('Invalid id', JSON.stringify(DEFAULT_TEMPLATE), callback);
+    it('Should return FAILED.', () => {
+      const res = makeElection('Invalid id', JSON.stringify(DEFAULT_TEMPLATE));
+      expect(res).toBeFalsy();
     });
   });
   describe('Election created.', () => {
     let ELECTION_ID;
     const DEFAULT_VOTERS = [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }];
 
-    beforeEach((done) => {
-      createElection(({ payload }) => {
-        ELECTION_ID = payload;
-        setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
-          lockVoters(ELECTION_ID, () => {
-            done();
-          });
-        });
-      });
+    beforeEach(() => {
+      ELECTION_ID = createElection();
+      setVoters(ELECTION_ID, DEFAULT_VOTERS);
+      lockVoters(ELECTION_ID);
     });
 
-    afterEach((done) => {
-      deleteElection(ELECTION_ID, () => {
-        done();
-      });
+    afterEach(() => {
+      deleteElection(ELECTION_ID);
     });
 
-    it('Should return FAILED. No election id', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      makeElection(undefined, JSON.stringify(DEFAULT_TEMPLATE), callback);
+    it('Should return FAILED. No election id', () => {
+      const res = makeElection(undefined, JSON.stringify(DEFAULT_TEMPLATE));
+      expect(res).toBeFalsy();
     });
-    it('Should return OK', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('OK');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), callback);
+    it('Should return OK', () => {
+      const res = makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+      expect(res).toBeTruthy();
     });
   });
 });
