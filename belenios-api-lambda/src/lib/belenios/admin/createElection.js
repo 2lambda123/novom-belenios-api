@@ -1,28 +1,24 @@
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import log from '../../logger/log';
 import { ELECTIONS_DIR } from '../global';
 
-function createElection(callback) {
-  if (!callback) return;
+/**
+ *
+ * @returns {String} electionId
+ */
 
+function createElection() {
   try {
-    exec('bash src/scripts/createElection.sh', (error, stdout) => {
-      if (error) {
-        callback({ status: 'FAILED', error });
-        return;
-      }
-
-      const electionDir = path.join(ELECTIONS_DIR, stdout);
-      fs.mkdirSync(electionDir);
-
-      callback({ status: 'OK', payload: stdout });
-    });
+    const electionId = execSync('bash src/scripts/createElection.sh').toString();
+    const electionDir = path.join(ELECTIONS_DIR, electionId);
+    fs.mkdirSync(electionDir);
+    return electionId;
   } catch (error) {
     log('error', error);
-    callback({ status: 'FAILED', error: error.message });
   }
+  return undefined;
 }
 
 export default createElection;
