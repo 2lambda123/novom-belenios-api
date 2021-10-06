@@ -1,42 +1,24 @@
-import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 import log from '../../logger/log';
 
-function executeMakeTrustees(electionId, votersFilePath, groupFilePath, electionDir, callback) {
-  exec(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${groupFilePath} ${electionDir}`, (error) => {
-    if (error) {
-      callback({ status: 'FAILED', error });
-      return;
-    }
-    callback({ status: 'OK' });
-  });
-}
+/**
+ *
+ * @param {String} electionId
+ * @returns {Boolean} success
+ */
 
-function lockVoters(electionId, callback) {
-  if (!callback) return;
-
+function lockVoters(electionId) {
   try {
-    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
-
-    if (!electionDir || !fs.existsSync(electionDir)) {
-      callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
-      return;
-    }
-
+    const electionDir = path.join(ELECTIONS_DIR, electionId);
     const votersFilePath = path.join(electionDir, VOTERS_FILE_NAME);
-
-    if (!fs.existsSync(votersFilePath)) {
-      callback({ status: 'FAILED', error: `Election {${electionId}} does not exist.` });
-      return;
-    }
-
-    executeMakeTrustees(electionId, votersFilePath, GROUP_FILE_PATH, electionDir, callback);
+    execSync(`bash src/scripts/makeTrustees.sh ${electionId} ${votersFilePath} ${GROUP_FILE_PATH} ${electionDir}`).toString();
+    return true;
   } catch (error) {
     log('error', error);
-    callback({ status: 'FAILED', error: error.message });
   }
+  return false;
 }
 
 export default lockVoters;

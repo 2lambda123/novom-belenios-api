@@ -5,62 +5,26 @@ import createElection from '../createElection';
 
 describe('Tests lockVoters', () => {
   describe('Election not created yet.', () => {
-    it('Should return FAILED.', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      lockVoters('Invalid id', callback);
+    it('Should return FAILED.', () => {
+      const res = setVoters('Invalid id');
+      expect(res).toBeFalsy();
     });
   });
   describe('Election created.', () => {
     let ELECTION_ID;
-    const DEFAULT_VOTERS = [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }];
 
-    beforeEach((done) => {
-      createElection(({ payload }) => {
-        ELECTION_ID = payload;
-        setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
-          done();
-        });
-      });
+    beforeEach(() => {
+      ELECTION_ID = createElection();
+      setVoters(ELECTION_ID);
     });
 
-    afterEach((done) => {
-      deleteElection(ELECTION_ID, () => {
-        done();
-      });
+    afterEach(() => {
+      deleteElection(ELECTION_ID);
     });
 
-    it('Should return FAILED.', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      lockVoters(undefined, callback);
-    });
-
-    it('Should return OK.', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('OK');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      lockVoters(ELECTION_ID, callback);
+    it('Should return true.', () => {
+      const res = lockVoters(ELECTION_ID);
+      expect(res).toBeTruthy();
     });
   });
 });
