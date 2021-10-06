@@ -1,44 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 import log from '../../logger/log';
-import { VOTERS_FILE_NAME, ELECTIONS_DIR, TRUSTEES_FILE_NAME } from '../global';
+import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
 
-function setVoters(electionId, voters, callback) {
-  if (!callback) return;
+/**
+ *
+ * @param {String} electionId
+ * @param {String} voters
+ * @returns {Boolean} success
+ */
 
-  if (!voters) {
-    callback({ status: 'FAILED', error: 'Invalid voters' });
-    return;
-  }
-
+function setVoters(electionId, voters) {
   try {
-    const electionDir = electionId ? path.join(ELECTIONS_DIR, electionId) : undefined;
-
-    if (!electionDir || !fs.existsSync(electionDir)) {
-      callback({ status: 'FAILED', error: `Election ${electionId} does not exist.` });
-      return;
-    }
-
-    const trusteesFilePath = path.join(electionDir, TRUSTEES_FILE_NAME);
-
-    if (fs.existsSync(trusteesFilePath)) {
-      callback({ status: 'FAILED', error: 'The voters list for this election has been locked.' });
-      return;
-    }
-
+    const electionDir = path.join(ELECTIONS_DIR, electionId);
     const votersFilePath = path.join(electionDir, VOTERS_FILE_NAME);
-    const votersList = voters.reduce((acc, curr) => acc.concat(curr.id, ',', curr.weight, '\n'), '');
-    fs.writeFile(votersFilePath, votersList, (error) => {
-      if (error) {
-        callback({ status: 'FAILED', error });
-        return;
-      }
-      callback({ status: 'OK' });
-    });
+    const votersArray = JSON.parse(voters);
+    const votersList = votersArray.reduce((acc, curr) => acc.concat(curr.id, ',', curr.weight, '\n'), '');
+    fs.writeFileSync(votersFilePath, votersList);
+    return true;
   } catch (error) {
     log('error', error);
-    callback({ status: 'FAILED', error: error.message });
   }
+  return false;
 }
 
 export default setVoters;

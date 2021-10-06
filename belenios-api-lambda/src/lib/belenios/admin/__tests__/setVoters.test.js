@@ -2,76 +2,39 @@ import setVoters from '../setVoters';
 import createElection from '../createElection';
 import deleteElection from '../deleteElection';
 
-const DEFAULT_VOTERS = [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }];
+const DEFAULT_VOTERS = JSON.stringify([{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }]);
 
 describe('Tests setVoters', () => {
   describe('Election not created yet.', () => {
-    it('Should return FAILED.', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      setVoters('Invalid id', DEFAULT_VOTERS, callback);
+    it('Should return false. Invalid id', () => {
+      const res = setVoters('Invalid id', DEFAULT_VOTERS);
+      expect(res).toBeFalsy();
     });
   });
   describe('Election created.', () => {
     let ELECTION_ID;
 
-    beforeEach((done) => {
-      createElection(({ payload }) => {
-        ELECTION_ID = payload;
-        done();
-      });
+    beforeEach(() => {
+      ELECTION_ID = createElection();
     });
 
-    afterEach((done) => {
-      deleteElection(ELECTION_ID, () => {
-        done();
-      });
+    afterEach(() => {
+      deleteElection(ELECTION_ID);
     });
 
-    it('Should return FAILED. No election id', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      setVoters(undefined, DEFAULT_VOTERS, callback);
+    it('Should return false. No election id', () => {
+      const res = setVoters(undefined, DEFAULT_VOTERS);
+      expect(res).toBeFalsy();
     });
 
-    it('Should return FAILED. No voters id', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('FAILED');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      setVoters(ELECTION_ID, undefined, callback);
+    it('Should return false. No voters id', () => {
+      const res = setVoters(ELECTION_ID, undefined);
+      expect(res).toBeFalsy();
     });
 
-    it('Should return OK', (done) => {
-      function callback(data) {
-        try {
-          expect(data).toBeDefined();
-          expect(data.status).toEqual('OK');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }
-      setVoters(ELECTION_ID, DEFAULT_VOTERS, callback);
+    it('Should return true', () => {
+      const res = setVoters(ELECTION_ID, DEFAULT_VOTERS);
+      expect(res).toBeTruthy();
     });
   });
 });
