@@ -1,7 +1,8 @@
-// Election path
-export const ELECTIONS_DIR = 'elections';
+import settings from '../../settings';
+
+export const ELECTIONS_DIR = settings.elections_dir || `${__dirname}/../../../elections`;
+export const GROUP_FILE_PATH = `${__dirname}/../../files/groups/default.json`;
 export const ELECTION_FILE_NAME = 'election.json';
-export const GROUP_FILE_PATH = 'src/files/groups/default.json';
 export const TRUSTEES_FILE_NAME = 'trustees.json';
 export const TEMPLATE_FILE_NAME = 'template.json';
 export const VOTERS_FILE_NAME = 'voters.txt';
