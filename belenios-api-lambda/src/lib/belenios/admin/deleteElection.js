@@ -1,4 +1,4 @@
-import rimfaf from 'rimraf';
+import rimraf from 'rimraf';
 import path from 'path';
 import fs from 'fs';
 import { ELECTIONS_DIR } from '../global';
@@ -8,7 +8,7 @@ function deleteElection(electionId) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);
     if (electionDir && fs.existsSync(electionDir)) {
-      rimfaf.sync(electionDir);
+      rimraf.sync(electionDir);
     }
     return true;
   } catch (error) {
