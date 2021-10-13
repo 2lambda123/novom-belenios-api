@@ -25,7 +25,7 @@ describe('Tests createElection', () => {
   });
   it('Should return an election id', () => {
     const electionId = openElection(DEFAULT_VOTERS, DEFAULT_TEMPLATE);
-    // deleteElection(electionId);
+    deleteElection(electionId);
     expect(electionId).toBeDefined();
   });
 });
