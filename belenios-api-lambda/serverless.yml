@@ -13,6 +13,7 @@ provider:
     DYNAMODB_REGION: ${opt:region, self:provider.region}
     DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-election
     DYNAMODB_VOTE_TABLE: ${self:service}-${sls:stage}-vote
+    NODE_ENV: ${sls:stage}
   iamRoleStatements:
     - Effect: Allow
       Action:

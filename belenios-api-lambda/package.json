@@ -13,9 +13,9 @@
     "undeploy:demo": "bash scripts/undeploy.sh ca-central-1 demo",
     "undeploy:production": "bash scripts/undeploy.sh ca-central-1 production",
     "test": "yarn test:lint && yarn test:unit",
-    "test:unit": "jest --runInBand",
+    "test:unit": "yarn setup && jest --runInBand",
     "test:lint": "eslint src",
-    "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios",
+    "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios && mkdir -p elections",
     "build": "yarn clean && babel ./src --out-dir dist",
     "clean": "rm -rf ./dist && mkdir dist"
   },
