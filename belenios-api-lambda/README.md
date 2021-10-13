@@ -8,13 +8,14 @@ For more information about the Belenios voting system you can refer to this repo
 
 ## Prerequisites
 
+* An Amazon Web Services (AWS) account.
 * [Node](https://nodejs.org) v14.16 (it is recommended to install it via [NVM](https://github.com/creationix/nvm))
 * [Yarn](https://yarnpkg.com/)
 
 ## Getting Started
 
 1. From the project root directory, run `yarn` to install dependencies.
-2. Run `yarn start`.
+2. Add `.../dependencies/belenios/_build/install/default/bin` to path environment variable.
 
 ## How To
 
@@ -23,6 +24,13 @@ For more information about the Belenios voting system you can refer to this repo
 * Linter: `yarn test:lint`
 * Unit Tests: `yarn test:unit`
 * Both: `yarn test`
+
+### Deploy
+
+* In development: `yarn deploy:development`
+* In demo: `yarn deploy:demo`
+* In staging: `yarn deploy:staging`
+* In production: `yarn deploy:production`
 
 ## Contributing
 
