@@ -1,9 +1,5 @@
 #!/bin/bash
 
-belenios-tool () {
-  dependencies/belenios/_build/install/default/bin/belenios-tool "$@"
-}
-
 PRIV_KEYS_FILE_PATH=$1
 PARTIAL_DECRYPTION_FILE_PATH=$2
 RESULT_FILE_PATH=$3

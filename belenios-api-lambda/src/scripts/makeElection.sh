@@ -1,9 +1,5 @@
 #!/bin/bash
 
-belenios-tool () {
-  dependencies/belenios/_build/install/default/bin/belenios-tool "$@"
-}
-
 UUID=$1
 TEMPLATE=$2
 GROUP=$3
