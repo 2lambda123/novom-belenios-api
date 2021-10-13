@@ -3,12 +3,13 @@ import deleteElection from '../deleteElection';
 
 describe('Tests deleteElection', () => {
   it('Should return true', async () => {
-    createElection(({ payload }) => {
-      deleteElection(payload, callback);
-    });
+    const electionId = createElection();
+    const result = deleteElection(electionId);
+    expect(result).toBeTruthy();
   });
 
   it('Should return false', async () => {
-    deleteElection(undefined, callback);
+    const result = deleteElection(undefined);
+    expect(result).toBeFalsy();
   });
 });
