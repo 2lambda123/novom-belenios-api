@@ -10,11 +10,11 @@ import { ELECTIONS_DIR } from '../global';
 
 function electionObjectToFiles(electionId, electionFiles) {
   const electionDir = path.join(ELECTIONS_DIR, electionId);
-
   fs.mkdirSync(electionDir);
 
   electionFiles.forEach(({ name, content }) => {
-    fs.writeFileSync(`${electionDir}/${name}`, content);
+    const filePath = path.join(electionDir, name);
+    fs.writeFileSync(filePath, content);
   });
 }
 

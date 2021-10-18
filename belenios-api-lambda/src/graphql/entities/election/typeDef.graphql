@@ -1,6 +1,7 @@
   type Election {
     id: String!
     status: String
+    result: [Int]
   }
 
   type ElectionAnalytics {
@@ -18,5 +19,5 @@
     openElection(votersList: String!, template: String!): Election
     closeElection(id: String!): Election
     computeVoters(id: String!): ElectionAnalytics
-    joinElection(id: String!): String 
+    joinElection(id: String!, userId: String!): String 
   }

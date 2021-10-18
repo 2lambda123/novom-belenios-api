@@ -31,7 +31,7 @@ class Model {
   async get(id) {
     const params = {
       TableName: this.tableName,
-      Key: id,
+      Key: { id },
     };
 
     try {
@@ -62,9 +62,7 @@ class Model {
   async delete(id) {
     const params = {
       TableName: this.tableName,
-      Key: {
-        id,
-      },
+      Key: { id },
     };
 
     try {

@@ -20,38 +20,22 @@ describe('Test election files to object', () => {
     }],
   };
 
-  beforeEach((done) => {
-    createElection(({ payload }) => {
-      ELECTION_ID = payload;
-      setVoters(ELECTION_ID, DEFAULT_VOTERS, () => {
-        lockVoters(ELECTION_ID, () => {
-          makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE), () => {
-            done();
-          });
-        });
-      });
-    });
+  beforeEach(() => {
+    ELECTION_ID = createElection();
+    setVoters(ELECTION_ID, DEFAULT_VOTERS);
+    lockVoters(ELECTION_ID);
+    makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
   });
 
-  afterEach((done) => {
-    deleteElection(ELECTION_ID, () => {
-      done();
-    });
+  afterEach(() => {
+    deleteElection(ELECTION_ID);
   });
 
   it('Object to files', async () => {
     const election = electionFilesToObject(ELECTION_ID);
-
-    await new Promise((resolve) => {
-      deleteElection(ELECTION_ID, () => {
-        resolve();
-      });
-    });
-
+    deleteElection(ELECTION_ID);
     electionObjectToFiles(ELECTION_ID, election);
-
     const election2 = electionFilesToObject(ELECTION_ID);
-
-    expect(election === election2);
+    expect(election).toEqual(election2);
   });
 });
