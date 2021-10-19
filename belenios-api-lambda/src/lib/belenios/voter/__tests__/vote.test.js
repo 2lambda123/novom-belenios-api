@@ -37,7 +37,7 @@ describe('Tests vote', () => {
     expect(ballot).toBeUndefined();
   });
 
-  it('Should return a ballot. Single vote', () => {
+  it('Should return a ballot. Single vote', async () => {
     const privCred = joinElection(ELECTION_ID, DEFAULT_USER_ID);
     const ballot = vote(ELECTION_ID, privCred, JSON.stringify(DEFAULT_BALLOT));
     expect(ballot).toBeDefined();

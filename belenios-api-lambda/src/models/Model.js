@@ -3,6 +3,7 @@ import {
   BatchGetCommand,
   GetCommand,
   PutCommand,
+  QueryCommand,
 } from '@aws-sdk/lib-dynamodb';
 import log from '../lib/logger/log';
 import dynamoDBDocumentClient from '../lib/dynamoDB/dynamoDBDocumentClient';
@@ -68,6 +69,22 @@ class Model {
     try {
       const { Item } = await dynamoDBDocumentClient.send(new DeleteCommand(params));
       return Item;
+    } catch (error) {
+      log('error', JSON.stringify(error));
+    }
+
+    return null;
+  }
+
+  async query(params) {
+    const mergedParams = {
+      TableName: this.tableName,
+      ...params,
+    };
+
+    try {
+      const { Items } = await dynamoDBDocumentClient.send(new QueryCommand(mergedParams));
+      return Items;
     } catch (error) {
       log('error', JSON.stringify(error));
     }

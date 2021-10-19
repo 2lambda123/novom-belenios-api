@@ -2,7 +2,7 @@ import Model from './Model';
 
 class VoteModel extends Model {
   constructor() {
-    super(process.env.DYNAMODB_ELECTION_TABLE);
+    super(process.env.DYNAMODB_VOTE_TABLE);
   }
 }
 

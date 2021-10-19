@@ -1,10 +1,11 @@
 import closeElection from '../../../lib/belenios/admin/closeElection';
 import openElection from '../../../lib/belenios/admin/openElection';
-import clearElectionDir from '../../../lib/belenios/helpers/clearElectionsDir';
-import electionFilesToObject from '../../../lib/belenios/helpers/electionFilesToObject';
-import electionObjectToFiles from '../../../lib/belenios/helpers/electionObjectToFiles';
+import clearElectionDir from '../../../lib/helpers/clearElectionsDir';
+import electionFilesToObject from '../../../lib/helpers/electionFilesToObject';
+import electionObjectToFiles from '../../../lib/helpers/electionObjectToFiles';
 import joinElection from '../../../lib/belenios/voter/joinElection';
-import { Election } from '../../../models';
+import { Election, Vote } from '../../../models';
+import { BALLOTS_FILE_NAME } from '../../../lib/belenios/global';
 
 const resolver = {
   Query: {
@@ -25,23 +26,42 @@ const resolver = {
       return { id: election.id, status: election.status };
     },
     closeElection: async (_, { id }) => {
-      clearElectionDir();
       const election = await Election.get(id);
-      electionObjectToFiles(election.id, election.files);
+      const ballots = await Vote.query({
+        ExpressionAttributeNames: {
+          '#electionId': 'electionId',
+        },
+        ExpressionAttributeValues: {
+          ':electionId': id,
+        },
+        KeyConditionExpression: '#electionId = :electionId',
+        IndexName: process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID,
+      });
+
+      const ballotFile = {
+        content: ballots.map(({ ballot }) => ballot).join('/n'),
+        name: BALLOTS_FILE_NAME,
+      };
+
+      clearElectionDir();
+      electionObjectToFiles(election.id, [...election.files, ballotFile]);
       const result = closeElection(election.id);
+
       const closedElection = {
         id,
         result: result[0],
         status: 'CLOSED',
       };
-      await Election.put({ id, result: result[0], status: 'CLOSED' });
+      await Election.put(closedElection);
       return closedElection;
     },
     computeVoters: async () => { },
     joinElection: async (_, { id, userId }) => {
-      clearElectionDir();
       const election = await Election.get(id);
+
+      clearElectionDir();
       electionObjectToFiles(election.id, election.files);
+
       return joinElection(id, userId);
     },
   },

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { ELECTIONS_DIR } from '../global';
+import { ELECTIONS_DIR } from '../belenios/global';
 
 /**
  *

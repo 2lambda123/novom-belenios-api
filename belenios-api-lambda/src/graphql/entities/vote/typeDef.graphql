@@ -1,13 +1,14 @@
 type Vote {
+  id: String!
   electionId: String!
   ballot: String!
   userCred: String!
 }
 
 extend type Query {
-  getAllElectionVotes(electionId: String): [Vote]
+  getAllElectionVotes(electionId: String!): [Vote]
 }
 
 extend type Mutation {
-  vote(electionId: String!, userCred: String!, ballot: [Int]): String
+  vote(electionId: String!, userCred: String!, ballot: [Int]): Vote
 }
