@@ -10,5 +10,5 @@ extend type Query {
 }
 
 extend type Mutation {
-  vote(electionId: String!, userCred: String!, ballot: [Int]): Vote
+  vote(electionId: String!, userCred: String!, ballot: [Int]): String
 }

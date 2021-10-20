@@ -34,7 +34,7 @@ const resolver = {
         ballot: encryptedBallot,
       };
       await Vote.put(vote);
-      return vote;
+      return publicKey;
     },
   },
 };
