@@ -7,7 +7,7 @@ import log from '../../logger/log';
  *
  * @param {String} electionId
  * @param {String} privCred
- * @param {[Int]} ballot
+ * @param {String} ballot
  * @returns {String} encryptedBallot
  */
 

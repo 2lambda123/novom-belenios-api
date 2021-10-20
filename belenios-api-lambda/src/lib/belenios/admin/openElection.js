@@ -8,7 +8,7 @@ import setVoters from './setVoters';
  *
  * @param {String} votersList
  * @param {String} template
- * @returns {Boolean} electionId
+ * @returns
  */
 
 function openElection(votersList, template) {

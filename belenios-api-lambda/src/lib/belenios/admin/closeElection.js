@@ -8,6 +8,12 @@ import {
 } from '../global';
 import log from '../../logger/log';
 
+/**
+ *
+ * @param {String} electionId
+ * @returns
+ */
+
 function closeElection(electionId) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);

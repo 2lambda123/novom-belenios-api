@@ -6,7 +6,7 @@ import log from '../../logger/log';
 /**
  *
  * @param {String} electionId
- * @returns {Boolean} success
+ * @returns
  */
 
 function lockVoters(electionId) {

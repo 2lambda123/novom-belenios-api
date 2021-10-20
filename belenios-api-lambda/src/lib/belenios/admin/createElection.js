@@ -4,11 +4,6 @@ import path from 'path';
 import log from '../../logger/log';
 import { ELECTIONS_DIR } from '../global';
 
-/**
- *
- * @returns {String} electionId
- */
-
 function createElection() {
   try {
     const electionId = execSync('bash src/scripts/createElection.sh').toString();

@@ -7,7 +7,7 @@ import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
  *
  * @param {String} electionId
  * @param {String} voters
- * @returns {Boolean} success
+ * @returns
  */
 
 function setVoters(electionId, voters) {

@@ -1,8 +1,8 @@
-import createElection from '../../admin/createElection';
-import deleteElection from '../../admin/deleteElection';
-import lockVoters from '../../admin/lockVoters';
-import makeElection from '../../admin/makeElection';
-import setVoters from '../../admin/setVoters';
+import createElection from '../../belenios/admin/createElection';
+import deleteElection from '../../belenios/admin/deleteElection';
+import lockVoters from '../../belenios/admin/lockVoters';
+import makeElection from '../../belenios/admin/makeElection';
+import setVoters from '../../belenios/admin/setVoters';
 import electionFilesToObject from '../electionFilesToObject';
 import electionObjectToFiles from '../electionObjectToFiles';
 
