@@ -1,6 +1,6 @@
 import settings from '../../settings';
 
-export const ELECTIONS_DIR = settings.elections_dir || `${__dirname}/../../../elections`;
+export const ELECTIONS_DIR = (settings && settings.elections_dir) || `${__dirname}/../../../elections`;
 export const GROUP_FILE_PATH = `${__dirname}/../../files/groups/default.json`;
 export const ELECTION_FILE_NAME = 'election.json';
 export const TRUSTEES_FILE_NAME = 'trustees.json';
