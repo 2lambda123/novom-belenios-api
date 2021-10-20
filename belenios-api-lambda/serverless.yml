@@ -67,8 +67,6 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: electionId
-            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: "${self:provider.environment.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID}"
             KeySchema:
