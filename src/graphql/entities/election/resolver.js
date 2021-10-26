@@ -28,34 +28,40 @@ const resolver = {
       return electionId;
     },
     closeElection: async (_, { id }) => {
-      await Election.update(id, { status: 'CLOSED' });
+      async function tryCloseElection(election, retries) {
+        if (retries <= 0) return undefined;
 
-      const {
-        id: electionId,
-        files,
-        status,
-        votesSentCount,
-        result: electionResult,
-      } = await Election.get(id, { ConsistentRead: true });
+        const {
+          id: electionId,
+          votesSentCount,
+          files,
+        } = election;
+        const ballots = await Vote.getAllElectionVotes(id);
+        const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
 
-      const ballots = await Vote.getAllElectionVotes(id);
-      const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
-      if (status === 'CLOSED' && totalVotesVersions === votesSentCount) {
-        const ballotFile = {
-          content: ballots.map(({ ballot }) => ballot).join(''),
-          name: BALLOTS_FILE_NAME,
-        };
+        if (totalVotesVersions === votesSentCount) {
+          const ballotFile = {
+            content: ballots.map(({ ballot }) => ballot).join(''),
+            name: BALLOTS_FILE_NAME,
+          };
 
-        clearElectionDir();
-        electionObjectToFiles(electionId, [...files, ballotFile]);
-        const result = closeElection(electionId);
+          clearElectionDir();
+          electionObjectToFiles(electionId, [...files, ballotFile]);
+          const result = closeElection(electionId);
 
-        await Election.update(electionId, { result: result[0] });
+          await Election.update(electionId, { result: result[0] });
 
-        return result[0];
+          return result[0];
+        }
+
+        return setTimeout(tryCloseElection(retries - 1), 100);
       }
 
-      return electionResult;
+      await Election.update(id, { status: 'CLOSED' });
+
+      const election = await Election.get(id, { ConsistentRead: true });
+
+      return election.electionResult || tryCloseElection(election, 3);
     },
     computeVoters: async (_, { id }) => {
       const election = await Election.get(id);
