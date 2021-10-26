@@ -8,7 +8,7 @@ import log from '../../logger/log';
  * @param {String} electionId
  * @param {String} privCred
  * @param {String} ballot
- * @returns {String} encryptedBallot
+ * @returns
  */
 
 function vote(electionId, privCred, ballot) {

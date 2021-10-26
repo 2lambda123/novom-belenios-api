@@ -18,6 +18,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:ConditionCheckItem
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem

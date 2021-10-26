@@ -22,32 +22,25 @@ const resolver = {
         id: electionId,
         files: electionFiles,
         status: 'OPEN',
+        votesSentCount: 0,
       };
       await Election.put(election);
       return electionId;
     },
     closeElection: async (_, { id }) => {
+      await Election.update(id, { status: 'CLOSED' });
+
       const {
         id: electionId,
         files,
         status,
+        votesSentCount,
         result: electionResult,
-      } = await Election.get(id);
+      } = await Election.get(id, { ConsistentRead: true });
 
-      if (status === 'OPEN') {
-        await Election.update(electionId, { status: 'CLOSED' });
-
-        const ballots = await Vote.query({
-          ExpressionAttributeNames: {
-            '#electionId': 'electionId',
-          },
-          ExpressionAttributeValues: {
-            ':electionId': electionId,
-          },
-          KeyConditionExpression: '#electionId = :electionId',
-          IndexName: process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID,
-        });
-
+      const ballots = await Vote.getAllElectionVotes(id);
+      const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
+      if (status === 'CLOSED' && totalVotesVersions === votesSentCount) {
         const ballotFile = {
           content: ballots.map(({ ballot }) => ballot).join(''),
           name: BALLOTS_FILE_NAME,
@@ -66,16 +59,7 @@ const resolver = {
     },
     computeVoters: async (_, { id }) => {
       const election = await Election.get(id);
-      const ballots = await Vote.query({
-        ExpressionAttributeNames: {
-          '#electionId': 'electionId',
-        },
-        ExpressionAttributeValues: {
-          ':electionId': id,
-        },
-        KeyConditionExpression: '#electionId = :electionId',
-        IndexName: process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID,
-      });
+      const ballots = await Vote.getAllElectionVotes(id);
 
       const ballotFile = {
         content: ballots.map(({ ballot }) => ballot).join(''),

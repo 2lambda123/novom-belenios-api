@@ -5,19 +5,7 @@ import { Election, Vote } from '../../../models';
 
 const resolver = {
   Query: {
-    getAllElectionVotes: async (_, { electionId }) => {
-      const votes = await Vote.query({
-        ExpressionAttributeNames: {
-          '#electionId': 'electionId',
-        },
-        ExpressionAttributeValues: {
-          ':electionId': electionId,
-        },
-        KeyConditionExpression: '#electionId = :electionId',
-        IndexName: process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID,
-      });
-      return votes;
-    },
+    getAllElectionVotes: async (_, { electionId }) => Vote.getAllElectionVotes(electionId),
   },
   Mutation: {
     vote: async (_, { electionId, ballot, userCred }) => {
@@ -33,8 +21,8 @@ const resolver = {
         electionId,
         ballot: encryptedBallot,
       };
-      await Vote.put(vote);
-      return publicKey;
+
+      return Vote.transactionVote(vote);
     },
   },
 };

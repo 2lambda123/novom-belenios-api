@@ -14,10 +14,11 @@ class Model {
     this.tableName = tableName;
   }
 
-  async put(election) {
+  async put(election, extraParams) {
     const params = {
       TableName: this.tableName,
       Item: election,
+      ...extraParams,
     };
 
     try {
@@ -30,10 +31,11 @@ class Model {
     return null;
   }
 
-  async get(id) {
+  async get(id, extraParams) {
     const params = {
       TableName: this.tableName,
       Key: { id },
+      ...extraParams,
     };
 
     try {
@@ -46,10 +48,11 @@ class Model {
     return null;
   }
 
-  async batchGet(ids) {
+  async batchGet(ids, extraParams) {
     const params = {
       TableName: this.tableName,
       keys: ids,
+      ...extraParams,
     };
 
     try {
@@ -61,10 +64,11 @@ class Model {
     return null;
   }
 
-  async delete(id) {
+  async delete(id, extraParams) {
     const params = {
       TableName: this.tableName,
       Key: { id },
+      ...extraParams,
     };
 
     try {
@@ -93,7 +97,7 @@ class Model {
     return null;
   }
 
-  async update(id, item) {
+  async update(id, item, extraParams) {
     const UpdateExpression = `set ${Object.keys(item).map((k) => `#${k} = :${k}`).join(', ')}`;
     const ExpressionAttributeNames = Object.entries(item).reduce((acc, cur) => ({ ...acc, [`#${cur[0]}`]: cur[0] }), {});
     const ExpressionAttributeValues = Object.entries(item).reduce((acc, cur) => ({ ...acc, [`:${cur[0]}`]: cur[1] }), {});
@@ -104,6 +108,7 @@ class Model {
       UpdateExpression,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
+      ...extraParams,
     };
 
     try {
