@@ -8,6 +8,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import log from '../lib/logger/log';
 import dynamoDBDocumentClient from '../lib/dynamoDB/dynamoDBDocumentClient';
+import deepmerge from 'deepmerge';
 
 class Model {
   constructor(tableName) {
@@ -95,6 +96,25 @@ class Model {
     }
 
     return null;
+  }
+
+  async UNSAFE_query(params) {
+    const mergedParams = {
+      TableName: this.tableName,
+      ...params,
+    };
+
+    const result = await dynamoDBDocumentClient.send(new QueryCommand(mergedParams));
+    if (result.LastEvaluatedKey) {
+      const missingResult = await this.UNSAFE_query({
+        ...params,
+        ExclusiveStartKey: result.LastEvaluatedKey,
+      });
+
+      return deepmerge(result, missingResult);
+    }
+
+    return result;
   }
 
   async update(id, item, extraParams) {

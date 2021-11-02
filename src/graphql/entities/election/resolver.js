@@ -36,7 +36,7 @@ const resolver = {
           votesSentCount,
           files,
         } = election;
-        const ballots = await Vote.getAllElectionVotes(id);
+        const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
         const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
 
         if (totalVotesVersions === votesSentCount) {
@@ -65,7 +65,7 @@ const resolver = {
     },
     computeVoters: async (_, { id }) => {
       const election = await Election.get(id);
-      const ballots = await Vote.getAllElectionVotes(id);
+      const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
 
       const ballotFile = {
         content: ballots.map(({ ballot }) => ballot).join(''),

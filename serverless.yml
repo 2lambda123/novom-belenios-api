@@ -31,6 +31,7 @@ provider:
 
 functions:
   graphql:
+    timeout: 29
     image:
       name: ${self:service}
     events:

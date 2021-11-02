@@ -23,6 +23,20 @@ class VoteModel extends Model {
     });
   }
 
+  async UNSAFE_getAllElectionVotes(electionId) {
+    const { Items } = await this.UNSAFE_query({
+      ExpressionAttributeNames: {
+        '#electionId': 'electionId',
+      },
+      ExpressionAttributeValues: {
+        ':electionId': electionId,
+      },
+      KeyConditionExpression: '#electionId = :electionId',
+      IndexName: this.electionnIdGSIName,
+    });
+    return Items;
+  }
+
   async transactionVote(vote) {
     const {
       electionId,

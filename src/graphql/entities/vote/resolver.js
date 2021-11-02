@@ -5,7 +5,7 @@ import { Election, Vote } from '../../../models';
 
 const resolver = {
   Query: {
-    getAllElectionVotes: async (_, { electionId }) => Vote.getAllElectionVotes(electionId),
+    getAllElectionVotes: async (_, { electionId }) => Vote.UNSAFE_getAllElectionVotes(electionId),
   },
   Mutation: {
     vote: async (_, { electionId, ballot, userCred }) => {
