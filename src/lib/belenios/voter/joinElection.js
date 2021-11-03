@@ -12,8 +12,8 @@ function joinElection(electionId, userId) {
     const privCredFilePath = path.join(electionDir, PRIVATE_CREDS_FILE_NAME);
     const data = fs.readFileSync(privCredFilePath, 'utf8');
     const users = data.split('\n');
-    const user = users.filter((u) => u && u.startsWith(`${userId},`));
-    const userCred = user[0].split(' ')[1];
+    const user = users.find((u) => u && u.startsWith(`${userId},`));
+    const userCred = user.split(' ')[1];
     return userCred;
   } catch (error) {
     log('error', error);
