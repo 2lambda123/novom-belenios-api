@@ -104,7 +104,4 @@ dist
 .tern-port
 
 belenios-api/elections
-belenios-api/dependencies/belenios/_build
-belenios-ballot-lambda/dependencies/belenios/_build
-belenios-ballot-lambda/.aws-sam
-belenios-ballot-lambda/samconfig.toml
+dependencies/belenios/_build

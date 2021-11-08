@@ -1,0 +1,46 @@
+{
+  "name": "@novom/belenios-api",
+  "version": "0.0.0",
+  "description": "A server API wrapping the belenios-tool command-line tool",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "deploy:development": "bash scripts/deploy.sh ca-central-1 development",
+    "deploy:staging": "bash scripts/deploy.sh ca-central-1 staging",
+    "deploy:demo": "bash scripts/deploy.sh ca-central-1 demo",
+    "deploy:production": "bash scripts/deploy.sh ca-central-1 production",
+    "undeploy:development": "bash scripts/undeploy.sh ca-central-1 development",
+    "undeploy:staging": "bash scripts/undeploy.sh ca-central-1 staging",
+    "undeploy:demo": "bash scripts/undeploy.sh ca-central-1 demo",
+    "undeploy:production": "bash scripts/undeploy.sh ca-central-1 production",
+    "test": "yarn test:lint && yarn test:unit",
+    "test:unit": "yarn setup && jest --runInBand",
+    "test:lint": "eslint src",
+    "setup": "tar -xf dependencies/belenios/_build.tar.xz -C dependencies/belenios && mkdir -p elections",
+    "build": "yarn clean && babel ./src --out-dir dist",
+    "clean": "rm -rf ./dist && mkdir dist"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.31.0",
+    "@aws-sdk/lib-dynamodb": "^3.31.0",
+    "apollo-server-lambda": "^3.3.0",
+    "aws-sdk": "^2.989.0",
+    "deepmerge": "^4.2.2",
+    "graphql": "^15.5.3",
+    "moment": "^2.29.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/eslint-parser": "^7.16.0",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-optional-chaining": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@types/jest": "^26.0.14",
+    "babel-plugin-import-graphql": "2.x.x",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "jest": "^24.9.0"
+  }
+}

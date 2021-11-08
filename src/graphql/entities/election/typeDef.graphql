@@ -1,0 +1,22 @@
+  type Election {
+    id: String!
+    status: String
+    result: [Int]
+  }
+
+  type ElectionAnalytics {
+    votersCount: Int
+    votesCount: Int
+  }
+  
+  type Query {
+    getElection(id: String!): Election
+    getElections(ids: [String]): [Election]
+  }
+
+  type Mutation {
+    openElection(votersList: String!, template: String!): String
+    closeElection(id: String!): [Int]
+    computeVoters(id: String!): ElectionAnalytics
+    joinElection(id: String!, userId: String!): String 
+  }

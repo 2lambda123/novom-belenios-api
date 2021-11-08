@@ -1,0 +1,77 @@
+service: belenios-api
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  lambdaHashingVersion: 20201221
+  ecr:
+    images:
+      belenios-api:
+        path: ./
+  environment:
+    DYNAMODB_REGION: ${opt:region, self:provider.region}
+    DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-election
+    DYNAMODB_VOTE_TABLE: ${self:service}-${sls:stage}-vote
+    DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID: ${self:service}-${sls:stage}-vote-gsi-election-id
+    NODE_ENV: ${sls:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:DeleteItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource: 
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_ELECTION_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_VOTE_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_VOTE_TABLE}/index/*"
+
+functions:
+  graphql:
+    image:
+      name: ${self:service}
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+      - http:
+          path: /
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    electionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_ELECTION_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    voteTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_VOTE_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: electionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: "${self:provider.environment.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID}"
+            KeySchema:
+              - AttributeName: electionId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
