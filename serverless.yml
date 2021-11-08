@@ -1,6 +1,7 @@
 service: belenios-api
 
 frameworkVersion: '2'
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
@@ -14,7 +15,7 @@ provider:
     DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-election
     DYNAMODB_VOTE_TABLE: ${self:service}-${sls:stage}-vote
     DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID: ${self:service}-${sls:stage}-vote-gsi-election-id
-    NODE_ENV: ${sls:stage}
+    NODE_ENV: ${file(./src/lib/serverless/getNodeEnv.js)}
   iamRoleStatements:
     - Effect: Allow
       Action:
