@@ -54,7 +54,7 @@ const resolver = {
           return result[0];
         }
 
-        return setTimeout(tryCloseElection(retries - 1), 100);
+        return tryCloseElection(retries - 1);
       }
 
       await Election.update(id, { status: 'CLOSED' });
