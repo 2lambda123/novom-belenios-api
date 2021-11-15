@@ -27,10 +27,17 @@ For more information about the Belenios voting system you can refer to this repo
 
 ### Deploy
 
-* In development: `yarn deploy:development`
+* In development: `yarn deploy {yourPersonalStage}`
 * In demo: `yarn deploy:demo`
 * In staging: `yarn deploy:staging`
 * In production: `yarn deploy:production`
+
+### undeploy
+
+* In development: `yarn undeploy {yourPersonalStage}`
+* In demo: `yarn undeploy:demo`
+* In staging: `yarn undeploy:staging`
+* In production: `yarn undeploy:production`
 
 ## Contributing
 

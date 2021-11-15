@@ -8,16 +8,18 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import log from '../lib/logger/log';
 import dynamoDBDocumentClient from '../lib/dynamoDB/dynamoDBDocumentClient';
+import deepmerge from 'deepmerge';
 
 class Model {
   constructor(tableName) {
     this.tableName = tableName;
   }
 
-  async put(election) {
+  async put(election, extraParams) {
     const params = {
       TableName: this.tableName,
       Item: election,
+      ...extraParams,
     };
 
     try {
@@ -30,10 +32,11 @@ class Model {
     return null;
   }
 
-  async get(id) {
+  async get(id, extraParams) {
     const params = {
       TableName: this.tableName,
       Key: { id },
+      ...extraParams,
     };
 
     try {
@@ -46,10 +49,11 @@ class Model {
     return null;
   }
 
-  async batchGet(ids) {
+  async batchGet(ids, extraParams) {
     const params = {
       TableName: this.tableName,
       keys: ids,
+      ...extraParams,
     };
 
     try {
@@ -61,10 +65,11 @@ class Model {
     return null;
   }
 
-  async delete(id) {
+  async delete(id, extraParams) {
     const params = {
       TableName: this.tableName,
       Key: { id },
+      ...extraParams,
     };
 
     try {
@@ -93,7 +98,26 @@ class Model {
     return null;
   }
 
-  async update(id, item) {
+  async UNSAFE_query(params) {
+    const mergedParams = {
+      TableName: this.tableName,
+      ...params,
+    };
+
+    const result = await dynamoDBDocumentClient.send(new QueryCommand(mergedParams));
+    if (result.LastEvaluatedKey) {
+      const missingResult = await this.UNSAFE_query({
+        ...params,
+        ExclusiveStartKey: result.LastEvaluatedKey,
+      });
+
+      return deepmerge(result, missingResult);
+    }
+
+    return result;
+  }
+
+  async update(id, item, extraParams) {
     const UpdateExpression = `set ${Object.keys(item).map((k) => `#${k} = :${k}`).join(', ')}`;
     const ExpressionAttributeNames = Object.entries(item).reduce((acc, cur) => ({ ...acc, [`#${cur[0]}`]: cur[0] }), {});
     const ExpressionAttributeValues = Object.entries(item).reduce((acc, cur) => ({ ...acc, [`:${cur[0]}`]: cur[1] }), {});
@@ -104,6 +128,7 @@ class Model {
       UpdateExpression,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
+      ...extraParams,
     };
 
     try {
