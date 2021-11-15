@@ -8,6 +8,7 @@ import { Election, Vote } from '../../../models';
 import { BALLOTS_FILE_NAME } from '../../../lib/belenios/global';
 import computeVoters from '../../../lib/belenios/admin/computeVoters';
 import protectedResolver from '../../protectedResolver';
+import sleep from '../../../lib/sleep/sleep';
 
 const resolver = {
   Query: {
@@ -64,7 +65,9 @@ const resolver = {
             return result[0];
           }
 
-          return setTimeout(tryCloseElection(retries - 1), 100);
+          await sleep(100);
+
+          return tryCloseElection(election, retries - 1);
         }
 
         await Election.update(id, { status: 'CLOSED' });
