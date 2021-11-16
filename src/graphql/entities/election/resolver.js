@@ -7,87 +7,103 @@ import joinElection from '../../../lib/belenios/voter/joinElection';
 import { Election, Vote } from '../../../models';
 import { BALLOTS_FILE_NAME } from '../../../lib/belenios/global';
 import computeVoters from '../../../lib/belenios/admin/computeVoters';
+import protectedResolver from '../../protectedResolver';
 import sleep from '../../../lib/sleep/sleep';
 
 const resolver = {
   Query: {
-    getElections: async (_, { ids }) => Election.batchGet(ids),
-    getElection: async (_, { id }) => Election.get(id),
+    getElections: protectedResolver({
+      resolver: async (_, { ids }) => Election.batchGet(ids),
+    }),
+    getElection: protectedResolver({
+      resolver: async (_, { id }) => Election.get(id),
+    }),
   },
   Mutation: {
-    openElection: async (_, { votersList, template }) => {
-      clearElectionDir();
-      const electionId = openElection(votersList, template);
-      const electionFiles = electionFilesToObject(electionId);
-      const election = {
-        id: electionId,
-        files: electionFiles,
-        status: 'OPEN',
-        votesSentCount: 0,
-      };
-      await Election.put(election);
-      return electionId;
-    },
-    closeElection: async (_, { id }) => {
-      async function tryCloseElection(election, retries) {
-        if (retries <= 0) return undefined;
-
-        const {
+    openElection: protectedResolver({
+      role: 'admin',
+      resolver: async (_, { votersList, template }) => {
+        clearElectionDir();
+        const electionId = openElection(votersList, template);
+        const electionFiles = electionFilesToObject(electionId);
+        const election = {
           id: electionId,
-          votesSentCount,
-          files,
-        } = election;
-        const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
-        const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
+          files: electionFiles,
+          status: 'OPEN',
+          votesSentCount: 0,
+        };
+        await Election.put(election);
+        return electionId;
+      },
+    }),
+    closeElection: protectedResolver({
+      role: 'admin',
+      resolver: async (_, { id }) => {
+        async function tryCloseElection(election, retries) {
+          if (retries <= 0) return undefined;
 
-        if (totalVotesVersions === votesSentCount) {
-          const ballotFile = {
-            content: ballots.map(({ ballot }) => ballot).join(''),
-            name: BALLOTS_FILE_NAME,
-          };
+          const {
+            id: electionId,
+            votesSentCount,
+            files,
+          } = election;
+          const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
+          const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
 
-          clearElectionDir();
-          electionObjectToFiles(electionId, [...files, ballotFile]);
-          const result = closeElection(electionId);
+          if (totalVotesVersions === votesSentCount) {
+            const ballotFile = {
+              content: ballots.map(({ ballot }) => ballot).join(''),
+              name: BALLOTS_FILE_NAME,
+            };
 
-          await Election.update(electionId, { result: result[0] });
+            clearElectionDir();
+            electionObjectToFiles(electionId, [...files, ballotFile]);
+            const result = closeElection(electionId);
 
-          return result[0];
+            await Election.update(electionId, { result: result[0] });
+
+            return result[0];
+          }
+
+          await sleep(100);
+
+          return tryCloseElection(election, retries - 1);
         }
 
-        await sleep(100);
+        await Election.update(id, { status: 'CLOSED' });
 
-        return tryCloseElection(election, retries - 1);
-      }
+        const election = await Election.get(id, { ConsistentRead: true });
 
-      await Election.update(id, { status: 'CLOSED' });
+        return election.electionResult || tryCloseElection(election, 3);
+      },
+    }),
+    computeVoters: protectedResolver({
+      role: 'admin',
+      resolver: async (_, { id }) => {
+        const election = await Election.get(id);
+        const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
 
-      const election = await Election.get(id, { ConsistentRead: true });
+        const ballotFile = {
+          content: ballots.map(({ ballot }) => ballot).join(''),
+          name: BALLOTS_FILE_NAME,
+        };
 
-      return election.electionResult || tryCloseElection(election, 3);
-    },
-    computeVoters: async (_, { id }) => {
-      const election = await Election.get(id);
-      const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
+        clearElectionDir();
+        electionObjectToFiles(election.id, [...election.files, ballotFile]);
 
-      const ballotFile = {
-        content: ballots.map(({ ballot }) => ballot).join(''),
-        name: BALLOTS_FILE_NAME,
-      };
+        return computeVoters(id);
+      },
+    }),
+    joinElection: protectedResolver({
+      resolver: async (_, { id, userId }) => {
+        const election = await Election.get(id);
 
-      clearElectionDir();
-      electionObjectToFiles(election.id, [...election.files, ballotFile]);
+        clearElectionDir();
+        electionObjectToFiles(election.id, election.files);
 
-      return computeVoters(id);
-    },
-    joinElection: async (_, { id, userId }) => {
-      const election = await Election.get(id);
-
-      clearElectionDir();
-      electionObjectToFiles(election.id, election.files);
-
-      return joinElection(id, userId);
-    },
+        return joinElection(id, userId);
+      },
+    }),
   },
 };
 
