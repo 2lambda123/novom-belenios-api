@@ -2,8 +2,8 @@ const settings = {
   elections_dir: '/tmp',
   authorization: {
     jwt: {
-      secretKey: '',
-      algorithm: '',
+      secretKey: '<Secret key>',
+      algorithm: '<Algorithm>',
     },
   },
 };
