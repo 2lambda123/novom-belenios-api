@@ -27,8 +27,8 @@ For more information about the Belenios voting system you can refer to this repo
 
 ### Deploy
 
-1. Create a copy of {stage}.sample.js file of the stage you want to deploy.
-2. Enter the missing information in the setting file.
+1. Create a copy of each {stage}.sample.js files to {stage}.sample.js.
+2. Enter the missing information in the setting files.
 3. Run command:
 
 * In development: `yarn deploy {yourPersonalStage}`

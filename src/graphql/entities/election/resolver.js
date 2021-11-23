@@ -9,6 +9,7 @@ import { BALLOTS_FILE_NAME } from '../../../lib/belenios/global';
 import computeVoters from '../../../lib/belenios/admin/computeVoters';
 import protectedResolver from '../../protectedResolver';
 import sleep from '../../../lib/sleep/sleep';
+import countMaxVotesAndVoters from '../../../lib/belenios/admin/countMaxVotesAndVoters';
 
 const resolver = {
   Query: {
@@ -25,11 +26,18 @@ const resolver = {
       resolver: async (_, { votersList, template }) => {
         clearElectionDir();
         const electionId = openElection(votersList, template);
+        const {
+          maxVotes,
+          maxVoters,
+        } = countMaxVotesAndVoters(votersList);
         const electionFiles = electionFilesToObject(electionId);
         const election = {
           id: electionId,
           files: electionFiles,
           status: 'OPEN',
+          template,
+          maxVotes,
+          maxVoters,
           votesSentCount: 0,
         };
         await Election.put(election);
