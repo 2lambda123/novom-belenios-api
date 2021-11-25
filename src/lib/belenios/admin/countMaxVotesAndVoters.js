@@ -1,8 +1,9 @@
 function countMaxVotesAndVoters(votersList) {
   const voters = JSON.parse(votersList);
   const maxVoters = voters.length;
-  const maxVotes = voters.map(({ weight }) => weight).reduce(
-    (weightAcc, weight) => weightAcc + weight,
+  const maxVotes = voters.reduce(
+    (weightAcc, { weight }) => weightAcc + weight,
+    0,
   );
   return {
     maxVoters,
