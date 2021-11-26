@@ -95,13 +95,14 @@ const resolver = {
       },
     }),
     joinElection: protectedResolver({
-      resolver: async (_, { id, userId }) => {
+      resolver: async (_, { id }, context) => {
+        const { decodedToken: { beleniosId } } = context
         const election = await Election.get(id);
 
         clearElectionDir();
         electionObjectToFiles(election.id, election.files);
 
-        return joinElection(id, userId);
+        return joinElection(id, beleniosId);
       },
     }),
   },
