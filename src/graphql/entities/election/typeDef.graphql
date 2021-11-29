@@ -18,5 +18,5 @@
     openElection(votersList: String!, template: String!): String
     closeElection(id: String!): [Int]
     computeVoters(id: String!): ElectionAnalytics
-    joinElection(id: String!, userId: String!): String 
+    joinElection(id: String!): String 
   }
