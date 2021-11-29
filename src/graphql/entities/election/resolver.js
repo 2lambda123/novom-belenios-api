@@ -96,7 +96,7 @@ const resolver = {
     }),
     joinElection: protectedResolver({
       resolver: async (_, { id }, context) => {
-        const { decodedToken: { beleniosId } } = context
+        const { decodedToken: { beleniosId } } = context;
         const election = await Election.get(id);
 
         clearElectionDir();
