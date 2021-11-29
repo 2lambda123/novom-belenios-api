@@ -2,6 +2,9 @@
     id: String!
     status: String
     result: [Int]
+    template: String
+    maxVotes: Int,
+    maxVoters: Int,
   }
 
   type ElectionAnalytics {

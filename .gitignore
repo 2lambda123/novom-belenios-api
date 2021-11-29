@@ -105,3 +105,7 @@ dist
 
 belenios-api/elections
 dependencies/belenios/_build
+src/settings/development.js
+src/settings/staging.js
+src/settings/demo.js
+src/settings/production.js

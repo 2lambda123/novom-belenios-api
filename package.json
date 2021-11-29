@@ -5,9 +5,11 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "deploy": "bash scripts/deploy.sh ca-central-1",
+    "deploy:development": "bash scripts/deploy.sh ca-central-1 development",
     "deploy:staging": "bash scripts/deploy.sh ca-central-1 staging",
     "deploy:demo": "bash scripts/deploy.sh ca-central-1 demo",
     "deploy:production": "bash scripts/deploy.sh ca-central-1 production",
+    "deploy:undeploy": "bash scripts/undeploy.sh ca-central-1 development",
     "undeploy:staging": "bash scripts/undeploy.sh ca-central-1 staging",
     "undeploy": "bash scripts/deploy.sh ca-central-1",
     "undeploy:demo": "bash scripts/undeploy.sh ca-central-1 demo",
