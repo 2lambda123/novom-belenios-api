@@ -44,6 +44,7 @@
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "serverless": "^2.67.0"
   }
 }

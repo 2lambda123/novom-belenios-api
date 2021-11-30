@@ -1,7 +1,7 @@
-import development from './development';
-import production from './production';
-import staging from './staging';
-import demo from './demo';
+import development from './development.json';
+import production from './production.json';
+import staging from './staging.json';
+import demo from './demo.json';
 
 export const env = process.env.NODE_ENV || 'development';
 

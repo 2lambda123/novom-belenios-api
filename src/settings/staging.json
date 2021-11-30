@@ -1,0 +1,10 @@
+{
+  "elections_dir": "/tmp",
+  "allowedOrigin": "<url goes here>",
+  "authorization": {
+    "jwt": {
+      "secretKey": "<Secret key>",
+      "algorithm": "<Algorithm>"
+    }
+  }
+}
