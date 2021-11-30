@@ -28,4 +28,4 @@ while true; do
 done
 fi
 
-serverless remove --stage $STAGE --region $REGION
+yarn serverless remove --stage $STAGE --region $REGION
