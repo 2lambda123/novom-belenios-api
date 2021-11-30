@@ -39,11 +39,29 @@ functions:
       - http:
           path: /
           method: post
-          cors: true
+          cors:
+            origin: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: ${file(./src/lib/serverless/getCorsSettings.js):getCredentials}
       - http:
           path: /
           method: get
-          cors: true
+          cors:
+            origin: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: ${file(./src/lib/serverless/getCorsSettings.js):getCredentials}
 
 resources:
   Resources:

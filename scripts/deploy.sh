@@ -31,4 +31,4 @@ while true; do
 done
 fi
 
-serverless deploy --stage $STAGE --region $REGION
+yarn serverless deploy --stage $STAGE --region $REGION
