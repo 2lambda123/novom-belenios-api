@@ -33,8 +33,8 @@ RUN yarn install --production
 
 # ---------- Release ----------
 FROM base as release
-COPY ./dependencies ./dependencies
 COPY ./src ./src
+COPY --from=builder /app/dependencies ./dependencies
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./src
 ENV PATH "$PATH:/app/dependencies/belenios/_build/install/default/bin"
