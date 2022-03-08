@@ -1,34 +1,31 @@
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
+
 import { UNAUTHORIZED } from '../../graphql/apolloErrors';
 import settings from '../../settings';
 
 import log from '../logger/log';
 
 const { algorithm, secretKey } = settings.authorization.jwt;
+const connexionKey = Buffer.from(secretKey);
 
 /**
- * Verify that the authorization token is valid.
- *
  * @param {string} token
- * @param {import('jsonwebtoken').VerifyOptions} [options]
+ * @param {object} options
+ * @param {string} options.alg
+ * @param {string} options.key
+ * @param {string} maxAge
  * @returns
  */
-function verifyJwt(token, options = {}) {
+export async function verifyJwtWithOptions(token, { alg, key }, maxAge = undefined) {
   if (token) {
     try {
-      const decodedToken = jwt.verify(
-        token,
-        secretKey,
-        {
-          clockTolerance: 2,
-          ...options,
-          algorithms: [algorithm],
-        },
-      );
-
-      return decodedToken;
-    } catch (error) {
-      log('error', error);
+      const decoded = await jwtVerify(token, Buffer.from(key), {
+        algorithms: [alg],
+        maxTokenAge: maxAge,
+      });
+      return decoded.payload;
+    } catch (err) {
+      log('error', err);
       throw UNAUTHORIZED;
     }
   }
@@ -36,4 +33,24 @@ function verifyJwt(token, options = {}) {
   return null;
 }
 
-export default verifyJwt;
+/**
+ * @param {string} token
+ * @param {string} maxAge
+ * @returns
+ */
+export async function verifyJwt(token, maxAge = undefined) {
+  if (token) {
+    try {
+      const decoded = await jwtVerify(token, connexionKey, {
+        algorithms: [algorithm],
+        maxTokenAge: maxAge,
+      });
+      return decoded.payload;
+    } catch (err) {
+      log('error', err);
+      throw UNAUTHORIZED;
+    }
+  }
+
+  return null;
+}
