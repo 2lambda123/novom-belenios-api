@@ -5,6 +5,7 @@
     template: String
     maxVotes: Int,
     maxVoters: Int,
+    ttl: Int,
   }
 
   type ElectionAnalytics {
@@ -18,7 +19,7 @@
   }
 
   type Mutation {
-    openElection(votersList: String!, template: String!): String
+    openElection(votersList: String!, template: String!, ttl: String): String
     closeElection(id: String!): [Int]
     computeVoters(id: String!): ElectionAnalytics
     joinElection(id: String!): String 

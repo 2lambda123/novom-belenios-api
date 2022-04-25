@@ -20,7 +20,7 @@ const resolver = {
   Mutation: {
     openElection: protectedResolver({
       role: 'admin',
-      resolver: async (_, { votersList, template }) => {
+      resolver: async (_, { votersList, template, ttl }) => {
         clearElectionDir();
         const electionId = openElection(votersList, template);
         const {
@@ -35,6 +35,7 @@ const resolver = {
           maxVotes,
           maxVoters,
           votesSentCount: 0,
+          ttl,
         };
         const { id } = await Election.create(election);
         return id;
