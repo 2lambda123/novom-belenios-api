@@ -13,9 +13,6 @@ import countMaxVotesAndVoters from '../../../lib/belenios/admin/countMaxVotesAnd
 
 const resolver = {
   Query: {
-    getElections: protectedResolver({
-      resolver: async (_, { ids }) => Election.batchGet(ids),
-    }),
     getElection: protectedResolver({
       resolver: async (_, { id }) => Election.get(id),
     }),
@@ -32,7 +29,6 @@ const resolver = {
         } = countMaxVotesAndVoters(votersList);
         const electionFiles = electionFilesToObject(electionId);
         const election = {
-          id: electionId,
           files: electionFiles,
           status: 'OPEN',
           template,
@@ -40,7 +36,7 @@ const resolver = {
           maxVoters,
           votesSentCount: 0,
         };
-        await Election.put(election);
+        await Election.create(election);
         return electionId;
       },
     }),
@@ -51,11 +47,11 @@ const resolver = {
           if (retries <= 0) return undefined;
 
           const {
-            id: electionId,
+            electionId,
             votesSentCount,
             files,
           } = election;
-          const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
+          const ballots = await Vote.UNSAFE_getAllWithParent(id);
           const totalVotesVersions = ballots.reduce((acc, { version }) => (acc + version), 0);
 
           if (totalVotesVersions === votesSentCount) {
@@ -89,7 +85,7 @@ const resolver = {
       role: 'admin',
       resolver: async (_, { id }) => {
         const election = await Election.get(id);
-        const ballots = await Vote.UNSAFE_getAllElectionVotes(id);
+        const ballots = await Vote.UNSAFE_getAllWithParent(id);
 
         const ballotFile = {
           content: ballots.map(({ ballot }) => ballot).join(''),

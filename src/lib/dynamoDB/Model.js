@@ -1,8 +1,8 @@
 import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 
-import { asyncMap, asyncReduce } from '../lib/helpers/asyncIterators';
-import dynamoHelper from '../lib/dynamoDB/DynamoHelper';
+import { asyncMap, asyncReduce } from '../helpers/asyncIterators';
+import dynamoHelper from './DynamoHelper';
 
 class Model {
   /**

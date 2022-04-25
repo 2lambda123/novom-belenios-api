@@ -5,36 +5,7 @@ import Model from './Model';
 
 class VoteModel extends Model {
   constructor() {
-    super(process.env.DYNAMODB_VOTE_TABLE);
-
-    this.electionnIdGSIName = process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID;
-  }
-
-  async getAllElectionVotes(electionId) {
-    return this.query({
-      ExpressionAttributeNames: {
-        '#electionId': 'electionId',
-      },
-      ExpressionAttributeValues: {
-        ':electionId': electionId,
-      },
-      KeyConditionExpression: '#electionId = :electionId',
-      IndexName: this.electionnIdGSIName,
-    });
-  }
-
-  async UNSAFE_getAllElectionVotes(electionId) {
-    const { Items } = await this.UNSAFE_query({
-      ExpressionAttributeNames: {
-        '#electionId': 'electionId',
-      },
-      ExpressionAttributeValues: {
-        ':electionId': electionId,
-      },
-      KeyConditionExpression: '#electionId = :electionId',
-      IndexName: this.electionnIdGSIName,
-    });
-    return Items;
+    super('Vote');
   }
 
   async transactionVote(vote) {
