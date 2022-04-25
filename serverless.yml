@@ -13,10 +13,10 @@ provider:
   environment:
     DYNAMODB_REGION: ${opt:region, self:provider.region}
     NODE_ENV: ${file(./src/lib/serverless/getNodeEnv.js)}
-    TABLE_APP: "${self:custom.tables.app}"
-    GSI1: "${self:service}-${self:custom.stage}-gsi1"
-    GSI2: "${self:service}-${self:custom.stage}-gsi2"
-    LSI1: "${self:service}-${self:custom.stage}-lsi1"
+    TABLE: "${self:service}-${sls:stage}-app"
+    GSI1: "${self:service}-${sls:stage}-gsi1"
+    GSI2: "${self:service}-${sls:stage}-gsi2"
+    LSI1: "${self:service}-${sls:stage}-lsi1"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -27,7 +27,9 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource: 
-        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE_APP}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}/index/*"
+
 
 functions:
   graphql:
@@ -64,10 +66,10 @@ functions:
 
 resources:
   Resources:
-    AppTable:
+    Table:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: "${self:provider.environment.TABLE_APP}"
+        TableName: "${self:provider.environment.TABLE}"
         TimeToLiveSpecification:
           AttributeName: "ttl"
           Enabled: true

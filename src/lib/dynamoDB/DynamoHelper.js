@@ -15,10 +15,10 @@ class DynamoHelper {
    * @memberof DynamoHelper
    */
   constructor(AWSClient, errors) {
-    const { TABLE_APP } = process.env;
+    const { TABLE } = process.env;
 
     this.client = AWSClient;
-    this.tableName = TABLE_APP;
+    this.tableName = TABLE;
     this.errors = errors;
     this.gsi1 = process.env.GSI1;
     this.gsi2 = process.env.GSI2;

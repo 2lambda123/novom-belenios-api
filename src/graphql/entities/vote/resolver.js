@@ -19,14 +19,7 @@ const resolver = {
         electionObjectToFiles(election.id, election.files);
         const encryptedBallot = voteElection(electionId, userCred, JSON.stringify([ballot]));
 
-        const publicKey = JSON.parse(encryptedBallot).signature.public_key;
-        const vote = {
-          id: publicKey,
-          electionId,
-          ballot: encryptedBallot,
-        };
-
-        return Vote.transactionVote(vote);
+        return Vote.transactionVote(election.id, encryptedBallot);
       },
     }),
   },

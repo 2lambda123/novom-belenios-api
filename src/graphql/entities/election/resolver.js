@@ -36,8 +36,8 @@ const resolver = {
           maxVoters,
           votesSentCount: 0,
         };
-        await Election.create(election);
-        return electionId;
+        const { id } = await Election.create(election);
+        return id;
       },
     }),
     closeElection: protectedResolver({
@@ -47,7 +47,7 @@ const resolver = {
           if (retries <= 0) return undefined;
 
           const {
-            electionId,
+            id: electionId,
             votesSentCount,
             files,
           } = election;
