@@ -12,7 +12,7 @@ class VoteModel extends Model {
     this.tableName = TABLE;
   }
 
-  async transactionVote(electionId, encryptedBallot) {
+  async transactionVote(electionId, encryptedBallot, ttl) {
     const now = moment.utc().toISOString();
     const publicKey = JSON.parse(encryptedBallot).signature.public_key;
     const id = `${this.type}_${publicKey}`;
@@ -28,6 +28,7 @@ class VoteModel extends Model {
           ballot: encryptedBallot,
           createdAt: now,
           version: 1,
+          ttl,
         },
         ConditionExpression: 'attribute_not_exists(id)',
       },
