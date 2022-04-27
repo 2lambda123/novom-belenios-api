@@ -26,6 +26,7 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:Query
         - dynamodb:UpdateItem
+        - dynamodb:BatchWriteItem
       Resource: 
         - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}"
         - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}/index/*"

@@ -103,6 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-belenios-api/elections
+elections
 dependencies/belenios/_build
 src/settings/development.json
