@@ -36,6 +36,9 @@ const server = new ApolloServer({
 
 exports.graphqlHandler = server.createHandler({
   expressGetMiddlewareOptions: {
+    bodyParserConfig: {
+      limit: '10mb',
+    },
     cors: {
       credentials: true,
       origin: settings.allowedOrigin,
