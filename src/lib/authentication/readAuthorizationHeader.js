@@ -1,4 +1,4 @@
-import { UNAUTHORIZED } from '../../graphql/apolloErrors';
+import { UNAUTHORIZED } from '../../functions/graphql/apolloErrors';
 
 function readAuthorizationHeader(authorizationHeader) {
   if (!authorizationHeader) return null;

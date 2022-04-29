@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server-lambda';
 
-import readAuthorizationHeader from '../lib/authentication/readAuthorizationHeader';
-import { verifyJwt } from '../lib/authentication/verifyJwt';
-import settings from '../settings';
+import readAuthorizationHeader from '../../lib/authentication/readAuthorizationHeader';
+import { verifyJwt } from '../../lib/authentication/verifyJwt';
+import settings from '../../settings';
 
 import { typeDefs, resolvers } from './entities';
 

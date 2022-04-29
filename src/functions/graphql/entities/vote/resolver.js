@@ -1,7 +1,7 @@
-import voteElection from '../../../lib/belenios/voter/vote';
+import voteElection from '../../../../lib/belenios/voter/vote';
 import protectedResolver from '../../protectedResolver';
-import { Election, Vote } from '../../../models';
-import downloadElectionToLocalFiles from '../../../lib/helpers/downloadElectionToLocalFiles';
+import { Election, Vote } from '../../../../models';
+import downloadElectionToLocalFiles from '../../../../lib/helpers/downloadElectionToLocalFiles';
 
 const resolver = {
   Query: {

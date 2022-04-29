@@ -11,12 +11,15 @@ provider:
       belenios-api:
         path: ./
   environment:
+    REGION: ${opt:region, self:provider.region}
     DYNAMODB_REGION: ${opt:region, self:provider.region}
     NODE_ENV: ${file(./src/lib/serverless/getNodeEnv.js)}
     TABLE: "${self:service}-${sls:stage}-app"
     GSI1: "${self:service}-${sls:stage}-gsi1"
     GSI2: "${self:service}-${sls:stage}-gsi2"
     LSI1: "${self:service}-${sls:stage}-lsi1"
+    LAMBDA_OPEN_ELECTION: "${self:service}-${sls:stage}-openElection"
+    LAMBDA_CLOSE_ELECTION: "${self:service}-${sls:stage}-closeElection"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -30,13 +33,18 @@ provider:
       Resource: 
         - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}"
         - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}/index/*"
-
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+        - "lambda:InvokeAsync"
+      Resource: "*"
 
 functions:
   graphql:
     timeout: 29
     image:
       name: ${self:service}
+      command: "./src/functions/graphql/index.graphqlHandler"
     events:
       - http:
           path: /
@@ -64,6 +72,16 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
             allowCredentials: ${file(./src/lib/serverless/getCorsSettings.js):getCredentials}
+  openElection:
+    timeout: 900
+    image:
+      name: "${self:service}"
+      command: "./src/functions/belenios/openElection/index.default"
+  closeElection:
+    timeout: 900
+    image:
+      name: "${self:service}"
+      command: "./src/functions/belenios/closeElection/index.default"
 
 resources:
   Resources:
