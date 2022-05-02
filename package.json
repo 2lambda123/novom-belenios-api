@@ -9,9 +9,9 @@
     "deploy:staging": "bash scripts/deploy.sh ca-central-1 staging",
     "deploy:demo": "bash scripts/deploy.sh ca-central-1 demo",
     "deploy:production": "bash scripts/deploy.sh ca-central-1 production",
-    "deploy:undeploy": "bash scripts/undeploy.sh ca-central-1 development",
+    "undeploy": "bash scripts/undeploy.sh ca-central-1",
+    "undeploy:development": "bash scripts/undeploy.sh ca-central-1 development",
     "undeploy:staging": "bash scripts/undeploy.sh ca-central-1 staging",
-    "undeploy": "bash scripts/deploy.sh ca-central-1",
     "undeploy:demo": "bash scripts/undeploy.sh ca-central-1 demo",
     "undeploy:production": "bash scripts/undeploy.sh ca-central-1 production",
     "test": "yarn test:lint && yarn test:unit",
@@ -30,7 +30,8 @@
     "graphql": "^15.5.3",
     "jose": "^4.5.1",
     "moment": "^2.29.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

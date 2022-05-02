@@ -1,65 +1,45 @@
 import { TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import moment from 'moment';
 import log from '../lib/logger/log';
 import dynamoDBDocumentClient from '../lib/dynamoDB/dynamoDBDocumentClient';
 import Model from './Model';
 
 class VoteModel extends Model {
   constructor() {
-    super(process.env.DYNAMODB_VOTE_TABLE);
+    super('Vote');
 
-    this.electionnIdGSIName = process.env.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID;
+    const { TABLE } = process.env;
+    this.tableName = TABLE;
   }
 
-  async getAllElectionVotes(electionId) {
-    return this.query({
-      ExpressionAttributeNames: {
-        '#electionId': 'electionId',
-      },
-      ExpressionAttributeValues: {
-        ':electionId': electionId,
-      },
-      KeyConditionExpression: '#electionId = :electionId',
-      IndexName: this.electionnIdGSIName,
-    });
-  }
-
-  async UNSAFE_getAllElectionVotes(electionId) {
-    const { Items } = await this.UNSAFE_query({
-      ExpressionAttributeNames: {
-        '#electionId': 'electionId',
-      },
-      ExpressionAttributeValues: {
-        ':electionId': electionId,
-      },
-      KeyConditionExpression: '#electionId = :electionId',
-      IndexName: this.electionnIdGSIName,
-    });
-    return Items;
-  }
-
-  async transactionVote(vote) {
-    const {
-      electionId,
-      id,
-      ballot,
-    } = vote;
-
+  async transactionVote(electionId, encryptedBallot, ttl) {
+    const now = moment.utc().toISOString();
+    const publicKey = JSON.parse(encryptedBallot).signature.public_key;
+    const id = `${this.type}_${publicKey}`;
     const voteExists = !!(await this.get(id, { ConsistentRead: true }));
+
     const putItem = {
       Put: {
         TableName: this.tableName,
         Item: {
-          ...vote,
+          id,
+          type: this.type,
+          parentId: electionId,
+          ballot: encryptedBallot,
+          createdAt: now,
           version: 1,
+          ttl,
         },
         ConditionExpression: 'attribute_not_exists(id)',
       },
     };
+
     const updateItem = {
       Update: {
         TableName: this.tableName,
         Key: {
           id,
+          type: this.type,
         },
         UpdateExpression: 'ADD #counter :increment SET #ballot = :ballot',
         ExpressionAttributeNames: {
@@ -68,31 +48,35 @@ class VoteModel extends Model {
         },
         ExpressionAttributeValues: {
           ':increment': 1,
-          ':ballot': ballot,
+          ':ballot': encryptedBallot,
         },
       },
     };
+
+    const updateVotesSentCount = {
+      Update: {
+        TableName: this.tableName,
+        Key: {
+          id: electionId,
+          type: 'Election',
+        },
+        ConditionExpression: '#status = :open',
+        UpdateExpression: 'ADD #counter :increment',
+        ExpressionAttributeNames: {
+          '#counter': 'votesSentCount',
+          '#status': 'status',
+        },
+        ExpressionAttributeValues: {
+          ':increment': 1,
+          ':open': 'OPEN',
+        },
+      },
+    };
+
     const params = {
       TransactItems: [
         voteExists ? updateItem : putItem,
-        {
-          Update: {
-            TableName: process.env.DYNAMODB_ELECTION_TABLE,
-            Key: {
-              id: electionId,
-            },
-            ConditionExpression: '#status = :open',
-            UpdateExpression: 'ADD #counter :increment',
-            ExpressionAttributeNames: {
-              '#counter': 'votesSentCount',
-              '#status': 'status',
-            },
-            ExpressionAttributeValues: {
-              ':increment': 1,
-              ':open': 'OPEN',
-            },
-          },
-        },
+        updateVotesSentCount,
       ],
     };
 

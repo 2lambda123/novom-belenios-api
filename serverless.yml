@@ -12,10 +12,11 @@ provider:
         path: ./
   environment:
     DYNAMODB_REGION: ${opt:region, self:provider.region}
-    DYNAMODB_ELECTION_TABLE: ${self:service}-${sls:stage}-election
-    DYNAMODB_VOTE_TABLE: ${self:service}-${sls:stage}-vote
-    DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID: ${self:service}-${sls:stage}-vote-gsi-election-id
     NODE_ENV: ${file(./src/lib/serverless/getNodeEnv.js)}
+    TABLE: "${self:service}-${sls:stage}-app"
+    GSI1: "${self:service}-${sls:stage}-gsi1"
+    GSI2: "${self:service}-${sls:stage}-gsi2"
+    LSI1: "${self:service}-${sls:stage}-lsi1"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -26,9 +27,9 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource: 
-        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_ELECTION_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_VOTE_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.DYNAMODB_VOTE_TABLE}/index/*"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}"
+        - "arn:aws:dynamodb:${self:provider.environment.DYNAMODB_REGION}:*:table/${self:provider.environment.TABLE}/index/*"
+
 
 functions:
   graphql:
@@ -65,34 +66,53 @@ functions:
 
 resources:
   Resources:
-    electionTable:
+    Table:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_ELECTION_TABLE}
+        TableName: "${self:provider.environment.TABLE}"
+        TimeToLiveSpecification:
+          AttributeName: "ttl"
+          Enabled: true
         AttributeDefinitions:
+          - AttributeName: type
+            AttributeType: S
           - AttributeName: id
+            AttributeType: S
+          - AttributeName: parentId
+            AttributeType: S
+          - AttributeName: sort_gsi_2_pk
+            AttributeType: S
+          - AttributeName: sort_gsi_2_sk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: type
             KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-    voteTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:provider.environment.DYNAMODB_VOTE_TABLE}
-        AttributeDefinitions:
           - AttributeName: id
-            AttributeType: S
-          - AttributeName: electionId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+            KeyType: RANGE
         GlobalSecondaryIndexes:
-          - IndexName: "${self:provider.environment.DYNAMODB_VOTE_TABLE_GSI_ELECTION_ID}"
+          - IndexName: "${self:provider.environment.GSI1}"
             KeySchema:
-              - AttributeName: electionId
+              - AttributeName: parentId
                 KeyType: HASH
+              - AttributeName: id
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: "${self:provider.environment.GSI2}"
+            KeySchema:
+              - AttributeName: sort_gsi_2_pk
+                KeyType: HASH
+              - AttributeName: sort_gsi_2_sk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        LocalSecondaryIndexes:
+          - IndexName: "${self:provider.environment.LSI1}"
+            KeySchema:
+              - AttributeName: type
+                KeyType: HASH
+              - AttributeName: parentId
+                KeyType: RANGE
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST

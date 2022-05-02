@@ -1,8 +1,6 @@
 type Vote {
   id: String!
-  electionId: String!
   ballot: String!
-  userCred: String!
 }
 
 extend type Query {
