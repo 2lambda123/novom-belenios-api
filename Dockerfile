@@ -39,4 +39,4 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./src
 ENV PATH "$PATH:/app/dependencies/belenios/_build/install/default/bin"
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
-CMD ["./src/graphql/index.graphqlHandler"]
+CMD ["./src/functions/graphql/index.graphqlHandler"]

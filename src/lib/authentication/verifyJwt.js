@@ -1,6 +1,6 @@
 import { jwtVerify } from 'jose';
 
-import { UNAUTHORIZED } from '../../graphql/apolloErrors';
+import { UNAUTHORIZED } from '../../functions/graphql/apolloErrors';
 import settings from '../../settings';
 
 import log from '../logger/log';

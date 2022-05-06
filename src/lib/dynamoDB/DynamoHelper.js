@@ -26,6 +26,25 @@ class DynamoHelper {
   }
 
   /**
+   * Batch write element until there is no UnprocessedItems left.
+   *
+   * @see [AWS.DynamoDB.batchWrite()](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#batchWrite-property)
+   *
+   * @param {DocumentClient.BatchWriteItemInput} params
+   * @memberof DynamoHelper
+   */
+  async batchWriteUnprocessedItemSafe(params) {
+    const result = await this.client.batchWrite(params).promise();
+    const { UnprocessedItems: RequestItems } = result;
+
+    if (RequestItems && Object.keys(RequestItems).length > 0) {
+      return this.batchWriteUnprocessedItemSafe({ RequestItems });
+    }
+
+    return result;
+  }
+
+  /**
    * Recursively batch write elements as the "batchWrite" function
    * takes a maximum of 25 operations at a time.
    *
@@ -49,7 +68,7 @@ class DynamoHelper {
       },
     };
 
-    const result = await this.client.batchWrite(params).promise();
+    const result = await this.batchWriteUnprocessedItemSafe(params);
 
     if (recursive && end <= writeItems.length - 1) {
       return this.batchWrite(writeItems, end);

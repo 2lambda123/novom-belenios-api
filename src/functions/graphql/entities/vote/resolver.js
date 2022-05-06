@@ -1,8 +1,7 @@
-import clearElectionDir from '../../../lib/helpers/clearElectionsDir';
-import electionObjectToFiles from '../../../lib/helpers/electionObjectToFiles';
-import voteElection from '../../../lib/belenios/voter/vote';
+import voteElection from '../../../../lib/belenios/voter/vote';
 import protectedResolver from '../../protectedResolver';
-import { Election, Vote } from '../../../models';
+import { Election, Vote } from '../../../../models';
+import downloadElectionToLocalFiles from '../../../../lib/helpers/downloadElectionToLocalFiles';
 
 const resolver = {
   Query: {
@@ -13,12 +12,10 @@ const resolver = {
   Mutation: {
     vote: protectedResolver({
       resolver: async (_, { electionId, ballot, userCred }) => {
+        await downloadElectionToLocalFiles(electionId);
+
         const election = await Election.get(electionId);
-
-        clearElectionDir();
-        electionObjectToFiles(election.id, election.files);
         const encryptedBallot = voteElection(electionId, userCred, JSON.stringify([ballot]));
-
         return Vote.transactionVote(election.id, encryptedBallot, election.ttl);
       },
     }),
