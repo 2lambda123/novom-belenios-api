@@ -1,0 +1,9 @@
+type Text {
+  fr: String!
+  en: String!
+}
+
+input TextInput {
+  fr: String!
+  en: String!
+}

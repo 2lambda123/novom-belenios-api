@@ -14,15 +14,15 @@ describe('Tests closeElection', () => {
     questions: [{
       answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
     }, {
-      answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      answers: ['Answer 1', 'Answer 2', 'Answer 3'], blank: true, min: 1, max: 1, question: 'Question 2?',
     }],
   };
 
   beforeEach(() => {
     ELECTION_ID = createElection();
-    setVoters(ELECTION_ID, JSON.stringify(DEFAULT_VOTERS));
+    setVoters(ELECTION_ID, DEFAULT_VOTERS);
     lockVoters(ELECTION_ID);
-    makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+    makeElection(ELECTION_ID, DEFAULT_TEMPLATE);
   });
 
   afterEach(() => {

@@ -5,7 +5,7 @@ import { ELECTIONS_DIR } from '../belenios/global';
 /**
  *
  * @param {String} electionId
- * @param {String} electionFiles
+ * @param {[Object]} electionFiles
  */
 
 function electionObjectToFiles(electionId, electionFiles) {

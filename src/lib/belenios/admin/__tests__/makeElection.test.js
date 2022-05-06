@@ -17,7 +17,7 @@ const DEFAULT_TEMPLATE = {
 describe('Tests makeElection', () => {
   describe('Election not created yet.', () => {
     it('Should return FAILED.', () => {
-      const res = makeElection('Invalid id', JSON.stringify(DEFAULT_TEMPLATE));
+      const res = makeElection('Invalid id', DEFAULT_TEMPLATE);
       expect(res).toBeFalsy();
     });
   });
@@ -36,11 +36,11 @@ describe('Tests makeElection', () => {
     });
 
     it('Should return FAILED. No election id', () => {
-      const res = makeElection(undefined, JSON.stringify(DEFAULT_TEMPLATE));
+      const res = makeElection(undefined, DEFAULT_TEMPLATE);
       expect(res).toBeFalsy();
     });
     it('Should return OK', () => {
-      const res = makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+      const res = makeElection(ELECTION_ID, DEFAULT_TEMPLATE);
       expect(res).toBeTruthy();
     });
   });

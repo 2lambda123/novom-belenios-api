@@ -7,7 +7,7 @@ import setVoters from './setVoters';
 /**
  *
  * @param {String} votersList
- * @param {String} template
+ * @param {Object} template
  * @returns
  */
 

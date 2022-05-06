@@ -21,8 +21,15 @@ const resolver = {
     openElection: protectedResolver({
       role: 'admin',
       resolver: async (_, {
-        votersList, template, ttl, parent,
+        election,
       }) => {
+        const {
+          votersList,
+          template,
+          ttl,
+          parent,
+        } = election;
+
         clearElectionDir();
         const { id } = await Election.create({ status: 'OPENING', ttl, parent });
 
