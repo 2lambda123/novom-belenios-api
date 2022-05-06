@@ -13,13 +13,18 @@ const resolver = {
     getElection: protectedResolver({
       resolver: async (_, { id }) => Election.get(id),
     }),
+    getAllElectionWithParent: protectedResolver({
+      resolver: async (_, { parentId }) => Election.getAllWithParent(parentId),
+    }),
   },
   Mutation: {
     openElection: protectedResolver({
       role: 'admin',
-      resolver: async (_, { votersList, template, ttl }) => {
+      resolver: async (_, {
+        votersList, template, ttl, parent,
+      }) => {
         clearElectionDir();
-        const { id } = await Election.create({ status: 'OPENING', ttl });
+        const { id } = await Election.create({ status: 'OPENING', ttl, parent });
 
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
