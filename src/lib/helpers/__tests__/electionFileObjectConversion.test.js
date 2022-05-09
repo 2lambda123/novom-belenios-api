@@ -55,5 +55,6 @@ describe('Test election files to object', () => {
     ]);
     const election2 = electionFilesToObject(ELECTION_ID);
     expect(election.files).toEqual(election2.files);
+    expect(election.users).toEqual(election2.users);
   });
 });
