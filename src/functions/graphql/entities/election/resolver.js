@@ -14,7 +14,14 @@ const resolver = {
       resolver: async (_, { id }) => Election.get(id),
     }),
     getAllElectionWithParent: protectedResolver({
-      resolver: async (_, { parentId }) => Election.getAllWithParent(parentId),
+      resolver: async (_, { parentId, start }) => {
+        const result = await Election.getAllWithParent({
+          itemsName: 'elections',
+          parentId,
+          start,
+        });
+        return result;
+      },
     }),
   },
   Mutation: {
@@ -27,11 +34,11 @@ const resolver = {
           votersList,
           template,
           ttl,
-          parent,
+          parentId,
         } = election;
 
         clearElectionDir();
-        const { id } = await Election.create({ status: 'OPENING', ttl, parent });
+        const { id } = await Election.create({ status: 'OPENING', ttl }, parentId);
 
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
