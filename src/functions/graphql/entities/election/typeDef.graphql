@@ -67,7 +67,6 @@
     getAllElectionWithParent(parentId: String, , start: String): PaginatedElections
   }
 
-
   type Mutation {
     openElection(election: ElectionInput!): String
     closeElection(id: String!): [Int]
