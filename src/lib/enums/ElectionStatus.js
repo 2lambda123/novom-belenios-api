@@ -1,0 +1,10 @@
+const ELECTION_STATUS = Object.freeze({
+  CLOSED: 'CLOSED',
+  CLOSING: 'CLOSING',
+  OPENED: 'OPENED',
+  OPENING: 'OPENING',
+  STARTED: 'STARTED',
+  STARTING: 'STARTING',
+});
+
+export default ELECTION_STATUS;

@@ -5,6 +5,7 @@ import { Election } from '../../../../models';
 import computeVoters from '../../../../lib/belenios/admin/computeVoters';
 import protectedResolver from '../../protectedResolver';
 import downloadElectionToLocalFiles from '../../../../lib/helpers/downloadElectionToLocalFiles';
+import ELECTION_STATUS from '../../../../lib/enums/ElectionStatus';
 
 const { LAMBDA_OPEN_ELECTION, LAMBDA_CLOSE_ELECTION } = process.env;
 
@@ -38,7 +39,7 @@ const resolver = {
         } = election;
 
         clearElectionDir();
-        const { id } = await Election.create({ status: 'OPENING', ttl }, parentId);
+        const { id } = await Election.create({ status: ELECTION_STATUS.OPENING, ttl }, parentId);
 
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
@@ -59,6 +60,8 @@ const resolver = {
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
         });
+
+        await Election.update(id, { status: ELECTION_STATUS.CLOSING });
 
         await lambda.invoke({
           FunctionName: LAMBDA_CLOSE_ELECTION,
