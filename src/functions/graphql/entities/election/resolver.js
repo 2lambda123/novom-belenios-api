@@ -62,11 +62,15 @@ const resolver = {
     closeElection: protectedResolver({
       role: 'admin',
       resolver: async (_, { id }) => {
+        await Election.update(id, { status: ELECTION_STATUS.CLOSING });
+
+        await downloadElectionToLocalFiles(id);
+        const voteAnalytics = await computeVoters(id);
+        await Election.update(id, { ...voteAnalytics });
+
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
         });
-
-        await Election.update(id, { status: ELECTION_STATUS.CLOSING });
 
         await lambda.invoke({
           FunctionName: LAMBDA_CLOSE_ELECTION,
