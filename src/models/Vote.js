@@ -3,6 +3,7 @@ import moment from 'moment';
 import log from '../lib/logger/log';
 import dynamoDBDocumentClient from '../lib/dynamoDB/dynamoDBDocumentClient';
 import Model from './Model';
+import ELECTION_STATUS from '../lib/enums/ElectionStatus';
 
 class VoteModel extends Model {
   constructor() {
@@ -60,7 +61,7 @@ class VoteModel extends Model {
           id: electionId,
           type: 'Election',
         },
-        ConditionExpression: '#status = :open',
+        ConditionExpression: '#status = :opened',
         UpdateExpression: 'ADD #counter :increment',
         ExpressionAttributeNames: {
           '#counter': 'votesSentCount',
@@ -68,7 +69,7 @@ class VoteModel extends Model {
         },
         ExpressionAttributeValues: {
           ':increment': 1,
-          ':open': 'OPEN',
+          ':opened': ELECTION_STATUS.OPENED,
         },
       },
     };

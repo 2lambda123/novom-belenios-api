@@ -39,7 +39,12 @@ const resolver = {
         } = election;
 
         clearElectionDir();
-        const { id } = await Election.create({ status: ELECTION_STATUS.OPENING, ttl }, parentId);
+        const { id } = await Election.create({
+          status: ELECTION_STATUS.OPENING,
+          ttl,
+          votersCount: 0,
+          votesCount: 0,
+        }, parentId);
 
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
@@ -74,7 +79,11 @@ const resolver = {
       role: 'admin',
       resolver: async (_, { id }) => {
         await downloadElectionToLocalFiles(id);
-        return computeVoters(id);
+
+        const voteAnalytics = await computeVoters(id);
+        await Election.update(id, { ...voteAnalytics });
+
+        return voteAnalytics;
       },
     }),
     joinElection: protectedResolver({

@@ -6,6 +6,8 @@
     parentId: String
     maxVotes: Int,
     maxVoters: Int,
+    votersCount: Int,
+    votesCount: Int,
     ttl: Int,
   }
 
