@@ -15,7 +15,7 @@ const resolver = {
         await downloadElectionToLocalFiles(electionId);
 
         const election = await Election.get(electionId);
-        const encryptedBallot = voteElection(electionId, userCred, JSON.stringify([ballot]));
+        const encryptedBallot = voteElection(electionId, userCred, [ballot]);
         return Vote.transactionVote(election.id, encryptedBallot, election.ttl);
       },
     }),
