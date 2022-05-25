@@ -5,6 +5,7 @@ import { Election } from '../../../../models';
 import computeVoters from '../../../../lib/belenios/admin/computeVoters';
 import protectedResolver from '../../protectedResolver';
 import downloadElectionToLocalFiles from '../../../../lib/helpers/downloadElectionToLocalFiles';
+import ELECTION_STATUS from '../../../../lib/enums/ElectionStatus';
 
 const { LAMBDA_OPEN_ELECTION, LAMBDA_CLOSE_ELECTION } = process.env;
 
@@ -13,13 +14,37 @@ const resolver = {
     getElection: protectedResolver({
       resolver: async (_, { id }) => Election.get(id),
     }),
+    getAllElectionWithParent: protectedResolver({
+      resolver: async (_, { parentId, start }) => {
+        const result = await Election.getAllWithParent({
+          itemsName: 'elections',
+          parentId,
+          start,
+        });
+        return result;
+      },
+    }),
   },
   Mutation: {
     openElection: protectedResolver({
       role: 'admin',
-      resolver: async (_, { votersList, template, ttl }) => {
+      resolver: async (_, {
+        election,
+      }) => {
+        const {
+          votersList,
+          template,
+          ttl,
+          parentId,
+        } = election;
+
         clearElectionDir();
-        const { id } = await Election.create({ status: 'OPENING', ttl });
+        const { id } = await Election.create({
+          status: ELECTION_STATUS.OPENING,
+          ttl,
+          votersCount: 0,
+          votesCount: 0,
+        }, parentId);
 
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
@@ -37,6 +62,12 @@ const resolver = {
     closeElection: protectedResolver({
       role: 'admin',
       resolver: async (_, { id }) => {
+        await Election.update(id, { status: ELECTION_STATUS.CLOSING });
+
+        await downloadElectionToLocalFiles(id);
+        const voteAnalytics = await computeVoters(id);
+        await Election.update(id, { ...voteAnalytics });
+
         const lambda = new aws.Lambda({
           endpoint: `lambda.${process.env.REGION}.amazonaws.com`,
         });
@@ -52,7 +83,11 @@ const resolver = {
       role: 'admin',
       resolver: async (_, { id }) => {
         await downloadElectionToLocalFiles(id);
-        return computeVoters(id);
+
+        const voteAnalytics = await computeVoters(id);
+        await Election.update(id, { ...voteAnalytics });
+
+        return voteAnalytics;
       },
     }),
     joinElection: protectedResolver({

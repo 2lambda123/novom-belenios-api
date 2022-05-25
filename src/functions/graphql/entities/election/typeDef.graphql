@@ -2,24 +2,75 @@
     id: String!
     status: String
     result: [Int]
-    template: String
+    template: Template!
+    parentId: String
     maxVotes: Int,
     maxVoters: Int,
+    votersCount: Int,
+    votesCount: Int,
     ttl: Int,
+  }
+
+  input ElectionInput {
+    template: TemplateInput!
+    parentId: String
+    ttl: Int,
+    votersList: [VoterInput]!
   }
 
   type ElectionAnalytics {
     votersCount: Int
     votesCount: Int
   }
-  
+
+  input Voter {
+    id: String!
+    weight: Int!
+  }
+
+  input VoterInput {
+    id: String!
+    weight: Int!
+  }
+
+  type Template {
+    description: Text,
+    name: Text!,
+    questions: [Question]!,
+  }
+
+  input TemplateInput {
+    description: TextInput,
+    name: TextInput!,
+    questions: [QuestionInput]!,
+  }
+
+  type Question {
+    answers: [Text]!
+    max: Int!,
+    min: Int!,
+    question: Text!,
+  }
+
+  input QuestionInput { 
+    answers: [TextInput]!
+    max: Int!,
+    min: Int!,
+    question: TextInput!,
+  }
+
+  type PaginatedElections {
+    elections: [Election]
+    lastEvaluated: String
+  }
+
   type Query {
     getElection(id: String!): Election
-    getElections(ids: [String]): [Election]
+    getAllElectionWithParent(parentId: String, , start: String): PaginatedElections
   }
 
   type Mutation {
-    openElection(votersList: String!, template: String!, ttl: Int): String
+    openElection(election: ElectionInput!): String
     closeElection(id: String!): [Int]
     computeVoters(id: String!): ElectionAnalytics
     joinElection(id: String!): String 

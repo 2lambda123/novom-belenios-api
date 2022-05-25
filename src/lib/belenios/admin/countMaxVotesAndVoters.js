@@ -1,5 +1,5 @@
 function countMaxVotesAndVoters(votersList) {
-  const voters = JSON.parse(votersList);
+  const voters = votersList;
   const maxVoters = voters.length;
   const maxVotes = voters.reduce(
     (weightAcc, { weight }) => weightAcc + weight,

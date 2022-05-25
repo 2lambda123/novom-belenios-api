@@ -3,6 +3,7 @@ import { Election, User } from '../../../models';
 import countMaxVotesAndVoters from '../../../lib/belenios/admin/countMaxVotesAndVoters';
 import electionFilesToObject from '../../../lib/helpers/electionFilesToObject';
 import openElection from '../../../lib/belenios/admin/openElection';
+import ELECTION_STATUS from '../../../lib/enums/ElectionStatus';
 
 async function handler(event) {
   const { id, votersList, template } = event;
@@ -17,7 +18,7 @@ async function handler(event) {
     files,
     maxVotes,
     maxVoters,
-    status: 'OPEN',
+    status: ELECTION_STATUS.OPENED,
     template,
     votesSentCount: 0,
   });
