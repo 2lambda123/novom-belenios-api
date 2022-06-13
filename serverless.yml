@@ -50,7 +50,7 @@ functions:
           path: /
           method: post
           cors:
-            origin: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
+            origins: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
             headers:
               - Content-Type
               - X-Amz-Date
@@ -63,7 +63,7 @@ functions:
           path: /
           method: get
           cors:
-            origin: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
+            origins: ${file(./src/lib/serverless/getCorsSettings.js):getOrigin}
             headers:
               - Content-Type
               - X-Amz-Date
