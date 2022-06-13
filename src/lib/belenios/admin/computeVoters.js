@@ -4,9 +4,11 @@ import log from '../../logger/log';
 import { ELECTIONS_DIR, PRIVATE_CREDENTIALS_FILE_NAME } from '../global';
 
 /**
+ * Compute the actual number of voters and votes of an election.
+ * Return the result.
  *
- * @param {String} electionId
- * @returns
+ * @param {string} electionId
+ * @returns {{votersCount: Number, votesCount: Number}}
  */
 
 function computeVoters(electionId) {

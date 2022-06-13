@@ -5,9 +5,11 @@ import { ELECTIONS_DIR } from '../global';
 import log from '../../logger/log';
 
 /**
+ * Delete election folder and all it's files.
+ * Return true on success.
  *
- * @param {String} electionId
- * @returns
+ * @param {string} electionId
+ * @returns {boolean}
  */
 
 function deleteElection(electionId) {

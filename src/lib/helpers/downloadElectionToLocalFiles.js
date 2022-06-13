@@ -8,6 +8,14 @@ import {
 import clearElectionDir from './clearElectionsDir';
 import electionObjectToFiles from './electionObjectToFiles';
 
+/**
+ * Clear the election folder and retrieve all the information of the specified election.
+ * Must be run before executing any action on the election.
+ *
+ * @param {string} electionId
+ * @returns
+ */
+
 async function downloadElectionToLocalFiles(electionId) {
   const election = await Election.get(electionId);
   const ballots = await Vote.UNSAFE_getAllWithParent(electionId);

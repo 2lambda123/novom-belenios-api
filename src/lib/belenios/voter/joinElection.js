@@ -6,6 +6,15 @@ import {
   PRIVATE_CREDENTIALS_FILE_NAME,
 } from '../global';
 
+/**
+ * Set the voters list of an election.
+ * Return true on success.
+ *
+ * @param {string} electionId
+ * @param {string} voters
+ * @returns {boolean}
+ */
+
 function joinElection(electionId, userId) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);

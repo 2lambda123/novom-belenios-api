@@ -23,7 +23,7 @@ export function mapElementsToArray(elements, array) {
 /**
  * Build delete requests for the elements in 'array'.
  *
- * @param {String} type
+ * @param {string} type
  * @param {Array} array
  * @returns {Array}
  */

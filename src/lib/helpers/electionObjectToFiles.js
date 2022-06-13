@@ -4,8 +4,8 @@ import { ELECTIONS_DIR } from '../belenios/global';
 
 /**
  *
- * @param {String} electionId
- * @param {String} electionFiles
+ * @param {string} electionId
+ * @param {Array.<{name: string, file: string}>} electionFiles
  */
 
 function electionObjectToFiles(electionId, electionFiles) {

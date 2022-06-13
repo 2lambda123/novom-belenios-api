@@ -4,10 +4,12 @@ import { ELECTIONS_DIR } from '../global';
 import log from '../../logger/log';
 
 /**
+ * Create an encrypted ballot for an attendee.
+ * Return the encrypted ballot.
  *
- * @param {String} electionId
- * @param {String} privCred
- * @param {String} ballot
+ * @param {string} electionId
+ * @param {string} privCred
+ * @param {string} ballot
  * @returns
  */
 

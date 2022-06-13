@@ -4,9 +4,11 @@ import { VOTERS_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 import log from '../../logger/log';
 
 /**
+ * Lock the voters list of an election.
+ * Return true on success.
  *
- * @param {String} electionId
- * @returns
+ * @param {string} electionId
+ * @returns {boolean}
  */
 
 function lockVoters(electionId) {

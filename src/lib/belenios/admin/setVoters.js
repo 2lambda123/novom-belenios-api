@@ -4,10 +4,12 @@ import log from '../../logger/log';
 import { VOTERS_FILE_NAME, ELECTIONS_DIR } from '../global';
 
 /**
+ * Set the voters list of an election.
+ * Return true on success.
  *
- * @param {String} electionId
- * @param {String} voters
- * @returns
+ * @param {string} electionId
+ * @param {string} voters
+ * @returns {boolean}
  */
 
 function setVoters(electionId, voters) {

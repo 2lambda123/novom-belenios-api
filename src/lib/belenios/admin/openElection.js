@@ -5,10 +5,12 @@ import makeElection from './makeElection';
 import setVoters from './setVoters';
 
 /**
+ * Open an election.
+ * Return the election id.
  *
- * @param {String} votersList
- * @param {String} template
- * @returns
+ * @param {string} votersList
+ * @param {Object} template
+ * @returns {string|undefined}
  */
 
 function openElection(votersList, template) {

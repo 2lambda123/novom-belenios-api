@@ -5,10 +5,12 @@ import { TEMPLATE_FILE_NAME, ELECTIONS_DIR, GROUP_FILE_PATH } from '../global';
 import log from '../../logger/log';
 
 /**
+ * Generate the election.json file.
+ * Return true on success.
  *
- * @param {String} electionId
- * @param {String} template
- * @returns
+ * @param {string} electionId
+ * @param {object} template
+ * @returns {boolean}
  */
 
 function makeElection(electionId, template) {
