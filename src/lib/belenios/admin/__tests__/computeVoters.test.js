@@ -24,16 +24,16 @@ describe('Tests computeVoters', () => {
     questions: [{
       answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
     }, {
-      answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      answers: ['Answer 1', 'Answer 2', 'Answer 3'], blank: true, min: 1, max: 1, question: 'Question 2?',
     }],
   };
   const DEFAULT_BALLOT = [[1, 0], [1, 0, 0]];
 
   beforeEach(() => {
     ELECTION_ID = createElection();
-    setVoters(ELECTION_ID, JSON.stringify(DEFAULT_VOTERS));
+    setVoters(ELECTION_ID, DEFAULT_VOTERS);
     lockVoters(ELECTION_ID);
-    makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+    makeElection(ELECTION_ID, DEFAULT_TEMPLATE);
   });
 
   afterEach(() => {
@@ -59,7 +59,7 @@ describe('Tests computeVoters', () => {
     const ballotFilePath = path.join(ELECTIONS_DIR, ELECTION_ID, BALLOTS_FILE_NAME);
 
     const userCred1 = joinElection(ELECTION_ID, DEFAULT_USER_ID_1);
-    const ballot1 = vote(ELECTION_ID, userCred1, JSON.stringify(DEFAULT_BALLOT));
+    const ballot1 = vote(ELECTION_ID, userCred1, DEFAULT_BALLOT);
     fs.appendFileSync(ballotFilePath, ballot1);
 
     const { votersCount, votesCount } = computeVoters(ELECTION_ID);
@@ -73,8 +73,8 @@ describe('Tests computeVoters', () => {
 
     const userCred1 = joinElection(ELECTION_ID, DEFAULT_USER_ID_1);
     const userCred2 = joinElection(ELECTION_ID, DEFAULT_USER_ID_2);
-    const ballot1 = vote(ELECTION_ID, userCred1, JSON.stringify(DEFAULT_BALLOT));
-    const ballot2 = vote(ELECTION_ID, userCred2, JSON.stringify(DEFAULT_BALLOT));
+    const ballot1 = vote(ELECTION_ID, userCred1, DEFAULT_BALLOT);
+    const ballot2 = vote(ELECTION_ID, userCred2, DEFAULT_BALLOT);
 
     fs.appendFileSync(ballotFilePath, [ballot1, ballot2].map((b) => b).join(''));
 

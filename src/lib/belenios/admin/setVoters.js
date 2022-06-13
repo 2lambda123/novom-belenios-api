@@ -16,8 +16,7 @@ function setVoters(electionId, voters) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);
     const votersFilePath = path.join(electionDir, VOTERS_FILE_NAME);
-    const votersArray = JSON.parse(voters);
-    const votersList = votersArray.reduce((acc, curr) => acc.concat(curr.id, ',', curr.weight, '\n'), '');
+    const votersList = voters.reduce((acc, curr) => acc.concat(curr.id, ',', curr.weight, '\n'), '');
     fs.writeFileSync(votersFilePath, votersList);
     return true;
   } catch (error) {

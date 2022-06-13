@@ -3,6 +3,7 @@ import path from 'path';
 import { ELECTIONS_DIR } from '../belenios/global';
 
 /**
+ * Write the election in the election folder.
  *
  * @param {string} electionId
  * @param {Array.<{name: string, file: string}>} electionFiles

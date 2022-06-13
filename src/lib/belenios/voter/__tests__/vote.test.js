@@ -17,15 +17,15 @@ describe('Tests vote', () => {
     questions: [{
       answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
     }, {
-      answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      answers: ['Answer 1', 'Answer 2', 'Answer 3'], blank: true, min: 1, max: 1, question: 'Question 2?',
     }],
   };
 
   beforeEach(() => {
     ELECTION_ID = createElection();
-    setVoters(ELECTION_ID, JSON.stringify(DEFAULT_VOTERS));
+    setVoters(ELECTION_ID, DEFAULT_VOTERS);
     lockVoters(ELECTION_ID);
-    makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+    makeElection(ELECTION_ID, DEFAULT_TEMPLATE);
   });
 
   afterEach(() => {
@@ -39,7 +39,7 @@ describe('Tests vote', () => {
 
   it('Should return a ballot. Single vote', async () => {
     const privCred = joinElection(ELECTION_ID, DEFAULT_USER_ID);
-    const ballot = vote(ELECTION_ID, privCred, JSON.stringify(DEFAULT_BALLOT));
+    const ballot = vote(ELECTION_ID, privCred, DEFAULT_BALLOT);
     expect(ballot).toBeDefined();
   });
 
@@ -48,10 +48,10 @@ describe('Tests vote', () => {
     const ballot2 = [[1, 0], [0, 1, 0]];
 
     const privCred1 = joinElection(ELECTION_ID, DEFAULT_USER_ID);
-    const vote1 = vote(ELECTION_ID, privCred1, JSON.stringify(ballot1));
+    const vote1 = vote(ELECTION_ID, privCred1, ballot1);
 
     const privCred2 = joinElection(ELECTION_ID, DEFAULT_USER_ID);
-    const vote2 = vote(ELECTION_ID, privCred2, JSON.stringify(ballot2));
+    const vote2 = vote(ELECTION_ID, privCred2, ballot2);
 
     expect(vote1).toBeDefined();
     expect(vote2).toBeDefined();

@@ -2,7 +2,7 @@ import setVoters from '../setVoters';
 import createElection from '../createElection';
 import deleteElection from '../deleteElection';
 
-const DEFAULT_VOTERS = JSON.stringify([{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }]);
+const DEFAULT_VOTERS = [{ id: 'bob', weight: 1 }, { id: 'bobby', weight: 3 }];
 
 describe('Tests setVoters', () => {
   describe('Election not created yet.', () => {

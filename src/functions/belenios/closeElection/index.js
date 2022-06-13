@@ -1,4 +1,5 @@
 import closeElection from '../../../lib/belenios/admin/closeElection';
+import ELECTION_STATUS from '../../../lib/enums/ElectionStatus';
 import downloadElectionToLocalFiles from '../../../lib/helpers/downloadElectionToLocalFiles';
 import sleep from '../../../lib/sleep/sleep';
 import { Election, Vote } from '../../../models';
@@ -29,12 +30,10 @@ async function tryCloseElection(election, retries) {
 async function handler(event) {
   const { id } = event;
 
-  await Election.update(id, { status: 'CLOSING' });
-
   const election = await Election.get(id, { ConsistentRead: true });
   const result = await tryCloseElection(election, 10);
 
-  await Election.update(id, { result, status: 'CLOSED' });
+  await Election.update(id, { result, status: ELECTION_STATUS.CLOSED });
 
   return { statusCode: 200 };
 }

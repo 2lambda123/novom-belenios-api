@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import path from 'path';
 import {
   ELECTIONS_DIR,
@@ -23,7 +23,7 @@ function closeElection(electionId) {
     const partialDecryptionsFilePath = path.join(electionDir, PARTIAL_DECRYPTIONS_FILE_NAME);
     const resultFilePath = path.join(electionDir, RESULT_FILE_NAME);
     const { result } = JSON.parse(
-      execSync(`bash src/scripts/closeElection.sh ${privateKeysFileName} ${partialDecryptionsFilePath} ${resultFilePath} ${electionDir}`).toString(),
+      execFileSync('src/scripts/closeElection.sh', [privateKeysFileName, partialDecryptionsFilePath, resultFilePath, electionDir]).toString(),
     );
     return result;
   } catch (error) {

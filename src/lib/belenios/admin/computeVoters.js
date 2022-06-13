@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import path from 'path';
 import log from '../../logger/log';
 import { ELECTIONS_DIR, PRIVATE_CREDENTIALS_FILE_NAME } from '../global';
@@ -15,7 +15,7 @@ function computeVoters(electionId) {
   try {
     const electionDir = path.join(ELECTIONS_DIR, electionId);
     const privCredFilePath = path.join(electionDir, PRIVATE_CREDENTIALS_FILE_NAME);
-    const voters = execSync(`bash src/scripts/computeVoters.sh ${privCredFilePath} ${electionDir}`).toString();
+    const voters = execFileSync('src/scripts/computeVoters.sh', [privCredFilePath, electionDir]).toString();
     const votersArray = voters.split('\n').filter((voter) => voter);
     const votes = votersArray.map((voter) => voter.split(',')[1]).filter((vote) => vote);
     const votersCount = votersArray.length;

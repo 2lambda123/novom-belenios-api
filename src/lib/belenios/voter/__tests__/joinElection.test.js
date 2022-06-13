@@ -27,9 +27,9 @@ describe('Tests joinElection', () => {
   describe('Election created.', () => {
     beforeEach(() => {
       ELECTION_ID = createElection();
-      setVoters(ELECTION_ID, JSON.stringify(DEFAULT_VOTERS));
+      setVoters(ELECTION_ID, DEFAULT_VOTERS);
       lockVoters(ELECTION_ID);
-      makeElection(ELECTION_ID, JSON.stringify(DEFAULT_TEMPLATE));
+      makeElection(ELECTION_ID, DEFAULT_TEMPLATE);
     });
 
     afterEach(() => {
