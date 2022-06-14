@@ -4,9 +4,11 @@ type Vote {
 }
 
 extend type Query {
+  "Get all anonymous and encrypted ballot of an election"
   getAllElectionVotes(electionId: String!): [Vote]
 }
 
 extend type Mutation {
+  "Add a vote to an election for a specific voter"
   vote(electionId: String!, userCred: String!, ballot: [Int]): String
 }
