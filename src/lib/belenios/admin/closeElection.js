@@ -9,9 +9,11 @@ import {
 import log from '../../logger/log';
 
 /**
+ * Close an election.
+ * Return the election result compiled.
  *
- * @param {String} electionId
- * @returns
+ * @param {string} electionId
+ * @returns {Array.<Array.<Number>>}
  */
 
 function closeElection(electionId) {

@@ -1,3 +1,11 @@
+/**
+ * Count the maximum number of voters and votes of an election.
+ * Return the result.
+ *
+ * @param {Array.<{weight: Number}>} votersList
+ * @returns {{maxVoters: Number, maxVotes: Number}}
+ */
+
 function countMaxVotesAndVoters(votersList) {
   const voters = votersList;
   const maxVoters = voters.length;

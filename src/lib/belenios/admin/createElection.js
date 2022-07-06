@@ -4,6 +4,13 @@ import path from 'path';
 import log from '../../logger/log';
 import { ELECTIONS_DIR } from '../global';
 
+/**
+ * Create a new election.
+ * Return the election id.
+ *
+ * @returns {string|undefined}
+ */
+
 function createElection() {
   try {
     const electionId = execFileSync('src/scripts/createElection.sh').toString();

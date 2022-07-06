@@ -60,3 +60,11 @@ This project contains a linting config, you should setup `eslint` into your IDE 
 
 Please refer to the [Issues](https://github.com/novom/belenios/issues) section
 if you encounter any problems during development.
+
+## Documentation
+
+### Technical documentation
+For technical documentation refer to [doc](https://github.com/novom/belenios-api/tree/add-doc/doc) folder.
+
+### API documentation
+Once deploy you can go directly to the endpoint and the Apollo Studio will automatically show the latest API doc in pair with a playground. 

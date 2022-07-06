@@ -65,13 +65,19 @@
   }
 
   type Query {
+    "Get the election information"
     getElection(id: String!): Election
+    "Get all election with a specific parent id"
     getAllElectionWithParent(parentId: String, , start: String): PaginatedElections
   }
 
   type Mutation {
+    "Open an election"
     openElection(election: ElectionInput!): String
+    "Close an election"
     closeElection(id: String!): [Int]
+    "Compute all current voters"
     computeVoters(id: String!): ElectionAnalytics
+    "Retrieve the credential for an election"
     joinElection(id: String!): String 
   }

@@ -11,17 +11,21 @@ import {
   VOTERS_FILE_NAME,
 } from '../belenios/global';
 
-/**
- *
- * @param {String} electionId
- * @returns
- */
-
 function electionFileToObject(electionId, file) {
   const electionDir = path.join(ELECTIONS_DIR, electionId);
   const fileDir = path.join(electionDir, file);
   return { name: file, file: fs.readFileSync(fileDir, 'utf8') };
 }
+
+/**
+ * Parse election information from files to a object.
+ *
+ * @param {string} electionId
+ * @returns {{
+ *  files: Array.<{name: string, file: string}>,
+ *  users: Array.<{privateCred: string, publicCred: string, voter: string }>,
+ * }>}}
+ */
 
 function electionFilesToObject(electionId) {
   const election = electionFileToObject(electionId, ELECTION_FILE_NAME);

@@ -33,10 +33,12 @@ function stringifyTemplate(template) {
 }
 
 /**
+ * Generate the election.json file.
+ * Return true on success.
  *
- * @param {String} electionId
- * @param {Object} template
- * @returns
+ * @param {string} electionId
+ * @param {object} template
+ * @returns {boolean}
  */
 
 function makeElection(electionId, template) {
