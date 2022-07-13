@@ -6,6 +6,8 @@ module.exports = (serverless) => {
       return 'staging';
     case 'production':
       return 'production';
+    case 'rbc':
+      return 'rbc';
     case 'demo':
       return 'demo';
     case 'development': default:

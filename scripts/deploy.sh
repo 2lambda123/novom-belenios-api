@@ -7,7 +7,7 @@ set -e
 # Check if docker is running
 docker info
 
-if [ $STAGE = "production" ] || [ $STAGE = "demo" ]
+if [ $STAGE = "production" ] || [ $STAGE = "demo" ] || [ $STAGE = "rbc" ]
 then
 while true; do
     read -p "You are about to deploy belenios-api in $STAGE. Do you want to continue ? [y/n]" yn
@@ -19,7 +19,7 @@ while true; do
 done
 fi
 
-if [ $STAGE = "production" ]
+if [ $STAGE = "production" ] || [ $STAGE = "rbc" ]
 then
 while true; do
     read -p "Really ? [y/n]" yn

@@ -1,0 +1,10 @@
+{
+  "elections_dir": "/tmp",
+  "allowedOrigin": "https://rbc.connexion.tv",
+  "authorization": {
+    "jwt": {
+      "secretKey": "WKjueWCA2GArjfrsqYfSfotTSakO8KTmYbi1HgYG/tjkiY6pPFlENR6a0oe0/SPdPbeOsoQdsSk96Ts1BUY5kDpO2ogzTRZMOVm81m/7WWYR9wJ/LtpEhr7IC1iCGN6jQjr90m8dWILWn8uohdlQ9cWALnEm27mG2p61eytDj8bPHnhS+XeKzZluUFEr1MRjjZi1yghtEbq8dcAuUdJkloso2FPKddFsQhKnyHL5CC5hEvB4juAufUQ3caLzdqTJR1LaHRwFXiLNazBh0qZrCuc7CGGCi1sdTXs7cvUmu38CN4ltEInLTHAcx4eduYvuzdLI2glPZlY88Lgc8IxcBA==",
+      "algorithm": "HS256"
+    }
+  }
+}
