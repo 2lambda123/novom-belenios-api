@@ -40,10 +40,6 @@ describe('Tests createElection', () => {
         answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
       }],
     };
-
-    const electionId = openElection(DEFAULT_VOTERS, election);
-    deleteElection(electionId);
-
     const election2 = {
       description: '',
       questions: [{
@@ -52,10 +48,6 @@ describe('Tests createElection', () => {
         answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
       }],
     };
-
-    const electionId2 = openElection(DEFAULT_VOTERS, election2);
-    deleteElection(electionId2);
-
     const election3 = {
       description: { fr: undefined, en: undefined },
       name: 'Name of the election',
@@ -66,7 +58,12 @@ describe('Tests createElection', () => {
       }],
     };
 
+    const electionId = openElection(DEFAULT_VOTERS, election);
+    const electionId2 = openElection(DEFAULT_VOTERS, election2);
     const electionId3 = openElection(DEFAULT_VOTERS, election3);
+
+    deleteElection(electionId);
+    deleteElection(electionId2);
     deleteElection(electionId3);
   });
 });
