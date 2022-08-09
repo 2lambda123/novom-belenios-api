@@ -18,14 +18,55 @@ describe('Tests createElection', () => {
     deleteElection(electionId);
     expect(electionId).toBeUndefined();
   });
+
   it('Should return false. Invalid template', () => {
     const electionId = openElection(DEFAULT_VOTERS, undefined);
     deleteElection(electionId);
     expect(electionId).toBeUndefined();
   });
+
   it('Should return an election id', () => {
     const electionId = openElection(DEFAULT_VOTERS, DEFAULT_TEMPLATE);
     deleteElection(electionId);
     expect(electionId).toBeDefined();
+  });
+
+  it('Should return an election id. Election with no description', () => {
+    const election = {
+      name: 'Name of the election',
+      questions: [{
+        answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
+      }, {
+        answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      }],
+    };
+
+    const electionId = openElection(DEFAULT_VOTERS, election);
+    deleteElection(electionId);
+
+    const election2 = {
+      description: '',
+      questions: [{
+        answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
+      }, {
+        answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      }],
+    };
+
+    const electionId2 = openElection(DEFAULT_VOTERS, election2);
+    deleteElection(electionId2);
+
+    const election3 = {
+      description: { fr: undefined, en: undefined },
+      name: 'Name of the election',
+      questions: [{
+        answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
+      }, {
+        answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      }],
+    };
+
+    const electionId3 = openElection(DEFAULT_VOTERS, election3);
+    deleteElection(electionId3);
   });
 });
