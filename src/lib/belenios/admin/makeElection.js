@@ -6,12 +6,12 @@ import log from '../../logger/log';
 
 function stringifyTemplate(template) {
   const {
-    description = '',
+    description,
     name,
     questions,
   } = template;
 
-  const stringifyDescription = JSON.stringify(description);
+  const stringifyDescription = JSON.stringify(description) || '';
   const stringifyName = JSON.stringify(name);
   const stringifyQuestions = questions.map(({
     answers,
