@@ -6,7 +6,7 @@ import log from '../../logger/log';
 
 function stringifyTemplate(template) {
   const {
-    description,
+    description = '',
     name,
     questions,
   } = template;
