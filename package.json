@@ -1,6 +1,6 @@
 {
   "name": "@novom/belenios-api",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "A server API wrapping the belenios-tool command-line tool",
   "license": "AGPL-3.0-only",
   "scripts": {
