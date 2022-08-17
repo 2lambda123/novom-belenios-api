@@ -11,7 +11,7 @@ function stringifyTemplate(template) {
     questions,
   } = template;
 
-  const stringifyDescription = JSON.stringify(description);
+  const stringifyDescription = JSON.stringify(description) || '';
   const stringifyName = JSON.stringify(name);
   const stringifyQuestions = questions.map(({
     answers,

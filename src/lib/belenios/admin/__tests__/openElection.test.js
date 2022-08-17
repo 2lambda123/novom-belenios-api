@@ -32,7 +32,7 @@ describe('Tests createElection', () => {
   });
 
   it('Should return an election id. Election with no description', () => {
-    const election = {
+    const election1 = {
       name: 'Name of the election',
       questions: [{
         answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
@@ -40,22 +40,15 @@ describe('Tests createElection', () => {
         answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
       }],
     };
-
-    const electionId = openElection(DEFAULT_VOTERS, election);
-    deleteElection(electionId);
-
     const election2 = {
-      description: '',
+      description: null,
+      name: 'Name of the election',
       questions: [{
         answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
       }, {
         answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
       }],
     };
-
-    const electionId2 = openElection(DEFAULT_VOTERS, election2);
-    deleteElection(electionId2);
-
     const election3 = {
       description: { fr: undefined, en: undefined },
       name: 'Name of the election',
@@ -65,8 +58,31 @@ describe('Tests createElection', () => {
         answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
       }],
     };
+    const election4 = {
+      name: 'Name of the election',
+      description: '',
+      questions: [{
+        answers: ['Answer 1', 'Answer 2'], min: 0, max: 1, question: 'Question 1?',
+      }, {
+        answers: ['Answer 1', 'Answer 2'], blank: true, min: 1, max: 1, question: 'Question 2?',
+      }],
+    };
+
+    const electionId1 = openElection(DEFAULT_VOTERS, election1);
+    deleteElection(electionId1);
+
+    const electionId2 = openElection(DEFAULT_VOTERS, election2);
+    deleteElection(electionId2);
 
     const electionId3 = openElection(DEFAULT_VOTERS, election3);
     deleteElection(electionId3);
+
+    const electionId4 = openElection(DEFAULT_VOTERS, election4);
+    deleteElection(electionId4);
+
+    expect(electionId1).toBeDefined();
+    expect(electionId2).toBeDefined();
+    expect(electionId3).toBeDefined();
+    expect(electionId4).toBeDefined();
   });
 });
